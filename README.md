@@ -1,7 +1,7 @@
 ### cs_20238
 Repositório definido para a manutenção do controle de versão dos artefatos do projeto de construção de uma API Rest para:
 
-**<descrever o propósito da API>**.
+armazenamento de imagens com um título e uma descrição atreladas, acessível de forma web para a distribuição dessas imagens, antes armazenadas localmente, entre plataformas diversas.
 
 ### Grupo
 Esta API será construída pelos componentes do grupo 8:
@@ -31,17 +31,13 @@ Esta API será construída pelos componentes do grupo 8:
 <Adicionar outras regras, se existirem.>
 
 ### Tecnologia de _Front-end_
-<Descrever a tecnologia que será utilizada no _front-end_.>
-
+A tecnologia usada para fazer o front-end que acessa a API é a biblioteca React.JS
 ### Tecnologia de _Back-end_
-<Descrever a tecnologia que será utilizada no _front-end_.>
-
+A tecnlogia usada para fazer o servidor é a linguagem Java com a framework Spring Boot.
 ### Tecnologia de Persistência de Dados
-<Descrever a tecnologia que será utilizada para Persistência de dados.>
-
+A tecnologia usada para fazer a persistência de dados é a plataforma MongoDB Atlas, que oferece hospedagem e manuseamento de bancos de dados MongoDB.
 ### Local do _Deploy_
-<Descrever onde será feito o _deploy_ da API.>
-
+O deploy da API será feito na plataforma DigitalOcean.
 ### Cronograma de Desenvolvimento
 
 |Iteração|Tarefa|Data Início|Data Fim|Responsável|Situação|

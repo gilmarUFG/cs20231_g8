@@ -10,7 +10,6 @@ Esta API será construída pelos componentes do grupo 8:
 |---|---|---|
 |202105026|Felipe Alves Leão de Araujo|[FelipeAlvesLeao](https://github.com/FelipeAlvesLeao)|
 |202105031|Gabriel Guimarães Cordeiro Bispo|[gabrielgcb](https://github.com/gabrielgcb)|
-|202105042|Kelvin de Oliveira|[]()|
 |202108001|Robert Cardoso Cantares Martins|[Robert-Martins](https://github.com/Robert-Martins)|
 |202105057|Yuan Andrade Calixto dos Santos|[YuanCalixto](https://github.com/YuanCalixto)|
 

@@ -10,23 +10,22 @@ Esta API será construída pelos componentes do grupo 8:
 |---|---|---|
 |202105026|Felipe Alves Leão de Araújo|[FelipeAlvesLeao](https://github.com/FelipeAlvesLeao)|
 |202105031|Gabriel Guimarães Cordeiro Bispo|[gabrielgcb](https://github.com/gabrielgcb)|
-|202105042|Kelvin de Oliveira|[]()|
 |202108001|Robert Cardoso Cantares Martins|[Robert-Martins](https://github.com/Robert-Martins)|
 |202105057|Yuan Andrade Calixto dos Santos|[YuanCalixto](https://github.com/YuanCalixto)|
 
 ### Requisitos Funcionais
-1. RF001 - <descrever>
-2. RF002 - <descrever>
-3. RF003 - <descrever>
-3. RF004 - <descrever>
-3. RF005 - <descrever>
+1. RF001 - Autentificação.
+2. RF002 - Ver todas as imagens enviadas pra database.
+3. RF003 - (com autentificação) Enviar nova imagem com título e descrição.
+3. RF004 - (com autentificação) Deletar imagem.
+3. RF005 - (com autentificação) Mudar título ou descrição da imagem.
 
 ### Requisitos Não Funcionais
-<Descrever os requisitos não funcionais identificados no mesmo modelo da descrição dos requisitos funcionais>
+A interface do sistema deve ser intuítiva e web, o sistema comporta qualquer equipamento e tela capaz de acessar um browser de internet, as funções de deletar e mudar o título só funcionam caso a pessoa autenticada seja a pessoa que enviou a imagem.
 
 ### Regras de Negócio
-1. RN01 - <descrever>
-2. RN02 - <descrever>
+1. RN01 - Imagens devem ter um limite de 11mb.
+2. RN02 - Imagens não devem incluir conteúdo sexual, inflamatório ou ilegal.
 
 <Adicionar outras regras, se existirem.>
 

@@ -1,4 +1,4 @@
-package com.ufg.g8.imagerepoapi.imagerepoapi;
+package com.ufg.g8.imagerepoapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -45,8 +45,8 @@ O deploy da API será feito na plataforma DigitalOcean.
 
 | Iteração | Tarefa | Data Início | Data Fim | Situação |
 | --- |---|---|---|---|
-| 1 | Especificar Escopo do Projeto e Requisitos | 17/04/2023 | 05/05/2023 | Em andamento |
-| 2 | Definir Entidades e Estruturar Aplicações | 06/05/2023 | 19/05/2023 | Programada |
+| 1 | Especificar Escopo do Projeto e Requisitos | 17/04/2023 | 05/05/2023 | Concluída |
+| 2 | Definir Entidades e Estruturar Aplicações | 06/05/2023 | 19/05/2023 | Em andamento |
 | 3 | CRUD de Usuários e Autenticação | 20/05/2023 | 02/06/2023 | Programada |
 | 4 | CRUD de Imagens | 03/06/2023 | 16/06/2023 | Programada |
 | 5 | Filtragem e Listagem de Imagens | 17/06/2023 | 30/06/2023 | Programada |

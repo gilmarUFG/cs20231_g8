@@ -10,4 +10,4 @@ Os atributos das entidades foram definidos em conformidade com as histórias vin
 | HU0001, HU0002 | User | Usuário para permitir acesso ao ambiente autenticado |
 | HU0003, HU0004, HU0005, HU0006, HU0007, HU0008 | Image | Entidade referente aos posts do sistema |
 | HU0003, HU0005, HU0006 | Tag | Entidade referente à classificação das imagens para melhor filtragem e categorização |
-| HU0001, HU0003, HU0007 | Media | Foi necessário separar as informações de um arquivo de `Image` pois o usuário também irá possui uma imagem de perfil |
+| HU0001, HU0003, HU0007 | File | Foi necessário separar as informações de um arquivo de `Image` pois o usuário também irá possui uma imagem de perfil. Contudo, basta as informações do arquivo |

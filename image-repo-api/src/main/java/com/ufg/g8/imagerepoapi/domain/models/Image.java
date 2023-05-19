@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Document(collection = "images")
@@ -29,5 +31,8 @@ public class Image extends BaseEntity {
 
     @DBRef
     private File file;
+
+    @DBRef
+    private List<Category> categories;
 
 }

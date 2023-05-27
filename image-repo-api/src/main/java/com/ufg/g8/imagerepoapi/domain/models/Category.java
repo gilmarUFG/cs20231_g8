@@ -1,26 +1,20 @@
 package com.ufg.g8.imagerepoapi.domain.models;
 
 import com.ufg.g8.imagerepoapi.infrastructure.base.BaseEntity;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Getter
 @Setter
-@Document(collection = "tags")
-public class Tag extends BaseEntity {
-
-    @NotNull
-    private String name;
-
-    @NotNull
-    private String color;
+@Document(collection = "categories")
+public class Category extends BaseEntity {
 
     @DBRef
-    private List<Category> categories;
+    private Image image;
+
+    @DBRef
+    private Tag tag;
 
 }

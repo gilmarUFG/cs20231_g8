@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 public class FileDto {
 
-    private ObjectId id;
+    private String id;
 
     private String name;
 

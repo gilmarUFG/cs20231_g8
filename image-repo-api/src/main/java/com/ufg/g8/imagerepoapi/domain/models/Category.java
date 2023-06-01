@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Category extends BaseEntity {
 
     @DBRef
-    private Image image;
+    private Media media;
 
     @DBRef
     private Tag tag;

@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Document(collection = "images")
-public class Image extends BaseEntity {
+public class Media extends BaseEntity {
 
     @NotNull
     private String name;
@@ -30,7 +30,7 @@ public class Image extends BaseEntity {
     private User author;
 
     @DBRef
-    private File file;
+    private MediaFile mediaFile;
 
     @DBRef
     private List<Category> categories;

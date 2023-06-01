@@ -17,7 +17,7 @@ import java.util.Collection;
 public class User extends BaseEntity implements UserDetails {
 
     @NotNull
-    private String username;
+    private String login;
 
     @NotNull
     private String password;
@@ -26,7 +26,12 @@ public class User extends BaseEntity implements UserDetails {
     private String name;
 
     @DBRef
-    private File profilePicture;
+    private MediaFile profilePicture;
+
+    @Override
+    public String getUsername(){
+        return this.login;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,8 +1,9 @@
 package com.ufg.g8.imagerepoapi.domain.services;
 
-import com.ufg.g8.imagerepoapi.domain.models.File;
-import com.ufg.g8.imagerepoapi.domain.repositories.FileRepository;
-import com.ufg.g8.imagerepoapi.presentation.dtos.FileDto;
+import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
+import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
+import com.ufg.g8.imagerepoapi.infrastructure.exceptions.FileIOException;
+import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IFileService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,54 +24,50 @@ import java.util.Base64;
 import java.util.Optional;
 
 @Service
-public class FileService implements IFileService {
+public class MediaFileService implements IFileService {
 
     private static final String DEFAULT_FILE_TYPE = "image";
-
-    private static final String INVALID_INPUT = "Erro no envio do arquivo";
-
-    private static final String INVALID_FILE_TYPE = "Tipo de arquivo inválido";
 
     private static final double RESIZE_AND_COMPRESS_RATIO = 0.7;
 
     @Autowired
-    private FileRepository fileRepository;
+    private MediaFileRepository mediaFileRepository;
 
     @Override
-    public FileDto create(MultipartFile file) {
+    public MediaFileDto create(MultipartFile file) {
         String fileType = Optional.ofNullable(file.getContentType()).orElse(DEFAULT_FILE_TYPE);
-        File newFile = this.createFile(file, fileType);
-        newFile = this.fileRepository.save(newFile);
-        return createFileDto(newFile);
+        MediaFile newMediaFile = this.createFile(file, fileType);
+        newMediaFile = this.mediaFileRepository.save(newMediaFile);
+        return createFileDto(newMediaFile);
     }
 
-    private File createFile(MultipartFile file, String fileType) {
+    private MediaFile createFile(MultipartFile file, String fileType) {
         try {
             this.checkFileType(fileType);
             BufferedImage image = ImageIO.read(file.getInputStream());
             BufferedImage resizedImage = resizeImage(image);
             byte[] imageData = this.compressImage(resizedImage);
-            File fileEntity = new File();
-            fileEntity.setName(file.getName());
-            fileEntity.setSize(file.getSize());
-            fileEntity.setType(fileType);
-            fileEntity.setData(imageData);
-            return fileEntity;
+            MediaFile mediaFileEntity = new MediaFile();
+            mediaFileEntity.setName(file.getName());
+            mediaFileEntity.setSize(file.getSize());
+            mediaFileEntity.setType(fileType);
+            mediaFileEntity.setData(imageData);
+            return mediaFileEntity;
         } catch (IOException exception) {
-            throw new InvalidParameterException(INVALID_INPUT);
+            throw new FileIOException("Erro ao salvar o arquivo da imagem");
         }
     }
 
-    private FileDto createFileDto(File file) {
-        FileDto fileDto = new FileDto();
-        BeanUtils.copyProperties(file, fileDto);
-        fileDto.setBase64(Base64.getEncoder().encodeToString(file.getData()));
-        return fileDto;
+    private MediaFileDto createFileDto(MediaFile mediaFile) {
+        MediaFileDto mediaFileDto = new MediaFileDto();
+        BeanUtils.copyProperties(mediaFile, mediaFileDto);
+        mediaFileDto.setBase64(Base64.getEncoder().encodeToString(mediaFile.getData()));
+        return mediaFileDto;
     }
 
     private void checkFileType(String fileType) {
         if(!fileType.contains(DEFAULT_FILE_TYPE))
-            throw new InvalidParameterException(INVALID_FILE_TYPE);
+            throw new InvalidParameterException("Arquivos " + fileType + " não são suportados");
     }
 
     private BufferedImage resizeImage(BufferedImage image) {

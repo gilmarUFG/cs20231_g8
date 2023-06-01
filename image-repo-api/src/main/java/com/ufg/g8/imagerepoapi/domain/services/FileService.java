@@ -2,6 +2,7 @@ package com.ufg.g8.imagerepoapi.domain.services;
 
 import com.ufg.g8.imagerepoapi.domain.models.File;
 import com.ufg.g8.imagerepoapi.domain.repositories.FileRepository;
+import com.ufg.g8.imagerepoapi.infrastructure.exceptions.FileIOException;
 import com.ufg.g8.imagerepoapi.presentation.dtos.FileDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IFileService;
 import org.springframework.beans.BeanUtils;
@@ -26,10 +27,6 @@ import java.util.Optional;
 public class FileService implements IFileService {
 
     private static final String DEFAULT_FILE_TYPE = "image";
-
-    private static final String INVALID_INPUT = "Erro no envio do arquivo";
-
-    private static final String INVALID_FILE_TYPE = "Tipo de arquivo inválido";
 
     private static final double RESIZE_AND_COMPRESS_RATIO = 0.7;
 
@@ -57,7 +54,7 @@ public class FileService implements IFileService {
             fileEntity.setData(imageData);
             return fileEntity;
         } catch (IOException exception) {
-            throw new InvalidParameterException(INVALID_INPUT);
+            throw new FileIOException("Erro ao salvar o arquivo da imagem");
         }
     }
 
@@ -70,7 +67,7 @@ public class FileService implements IFileService {
 
     private void checkFileType(String fileType) {
         if(!fileType.contains(DEFAULT_FILE_TYPE))
-            throw new InvalidParameterException(INVALID_FILE_TYPE);
+            throw new InvalidParameterException("Arquivos " + fileType + " não são suportados");
     }
 
     private BufferedImage resizeImage(BufferedImage image) {

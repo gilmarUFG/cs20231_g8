@@ -3,11 +3,9 @@ package com.ufg.g8.imagerepoapi.presentation.controllers;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IUserService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

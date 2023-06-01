@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document(collection = "files")
-public class File extends BaseEntity {
+public class MediaFile extends BaseEntity {
 
     @NotNull
     private String name;

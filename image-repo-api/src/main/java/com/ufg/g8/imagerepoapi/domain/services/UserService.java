@@ -1,8 +1,8 @@
 package com.ufg.g8.imagerepoapi.domain.services;
 
-import com.ufg.g8.imagerepoapi.domain.models.File;
+import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import com.ufg.g8.imagerepoapi.domain.models.User;
-import com.ufg.g8.imagerepoapi.domain.repositories.FileRepository;
+import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
 import com.ufg.g8.imagerepoapi.domain.repositories.UserRepository;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
@@ -23,15 +23,15 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
 
     @Autowired
-    private FileRepository fileRepository;
+    private MediaFileRepository mediaFileRepository;
 
     public void create(UserDto userDto) {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
         if(userDto.getProfilePictureId() != null) {
-            File file = this.fileRepository.findById(userDto.getProfilePictureId())
+            MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
-            user.setProfilePicture(file);
+            user.setProfilePicture(mediaFile);
         }
         this.userRepository.save(user);
     }
@@ -45,9 +45,9 @@ public class UserService implements IUserService {
                 "profilePicture.date"
         );
         userDto.setId(id.toString());
-        File file = user.getProfilePicture();
-        if(file != null)
-            userDto.setProfilePictureId(file.getId());
+        MediaFile mediaFile = user.getProfilePicture();
+        if(mediaFile != null)
+            userDto.setProfilePictureId(mediaFile.getId());
         userDto.setPassword("");
         return userDto;
     }
@@ -57,9 +57,9 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         BeanUtils.copyProperties(userDto, user, "id");
         if(userDto.getProfilePictureId() != null && userDto.getProfilePictureId() != user.getProfilePicture().getId()) {
-            File file = this.fileRepository.findById(userDto.getProfilePictureId())
+            MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
-            user.setProfilePicture(file);
+            user.setProfilePicture(mediaFile);
         }
         this.userRepository.save(user);
     }

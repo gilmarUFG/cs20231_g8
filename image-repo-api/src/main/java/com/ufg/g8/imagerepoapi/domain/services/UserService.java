@@ -4,7 +4,12 @@ import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import com.ufg.g8.imagerepoapi.domain.models.User;
 import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
 import com.ufg.g8.imagerepoapi.domain.repositories.UserRepository;
+import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
+import com.ufg.g8.imagerepoapi.infrastructure.security.JwtAuthenticationProvider;
+import com.ufg.g8.imagerepoapi.infrastructure.utils.EncryptUtils;
+import com.ufg.g8.imagerepoapi.presentation.dtos.CredentialsDto;
+import com.ufg.g8.imagerepoapi.presentation.dtos.TokenDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IUserService;
 import org.bson.types.ObjectId;
@@ -20,19 +25,31 @@ public class UserService implements IUserService {
     private static final String FILE_NOT_FOUND = "Arquivo não encontrado";
 
     @Autowired
+    private JwtAuthenticationProvider jwtAuthenticationProvider;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private MediaFileRepository mediaFileRepository;
 
+    public TokenDto login(CredentialsDto credentials) {
+        User user = userRepository.findByLogin(credentials.getLogin());
+        //if(!EncryptUtils.matchTextWithEncoded(credentials.getPassword(), user.getPassword()))
+
+        return new TokenDto(jwtAuthenticationProvider.generateToken(credentials.getLogin()));
+    }
+
     public void create(UserDto userDto) {
         User user = new User();
+        this.verifyLogin(userDto.getLogin());
         BeanUtils.copyProperties(userDto, user);
         if(userDto.getProfilePictureId() != null) {
             MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
             user.setProfilePicture(mediaFile);
         }
+        user.setPassword(EncryptUtils.encode(user.getPassword()));
         this.userRepository.save(user);
     }
 

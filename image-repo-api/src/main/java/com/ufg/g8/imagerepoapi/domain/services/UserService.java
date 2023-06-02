@@ -55,7 +55,15 @@ public class UserService implements IUserService {
     public void update(ObjectId id, UserDto userDto) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        BeanUtils.copyProperties(userDto, user, "id");
+        if(!userDto.getLogin().equalsIgnoreCase(user.getLogin()))
+            this.verifyLogin(userDto.getLogin());
+        BeanUtils.copyProperties(userDto, user,
+                "id",
+                "password",
+                "profilePicture",
+                "updatedAt",
+                "createdAt"
+        );
         if(userDto.getProfilePictureId() != null && userDto.getProfilePictureId() != user.getProfilePicture().getId()) {
             MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
@@ -66,6 +74,11 @@ public class UserService implements IUserService {
 
     public void delete(ObjectId id) {
         this.userRepository.deleteById(id);
+    }
+
+    private void verifyLogin(String login) {
+        if(userRepository.existsByLogin(login))
+            throw new DuplicateKeyException("O Login " + login + " já está em uso");
     }
 
 }

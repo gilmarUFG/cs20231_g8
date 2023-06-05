@@ -55,7 +55,7 @@ public class JwtAuthenticationProvider {
 
     public Authentication getAuthentication(String token) {
         User user = this.userRepository.findByLogin(this.getUsernameFromToken(token));
-        return new UsernamePasswordAuthenticationToken(user, null, null);
+        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 
     public String getTokenFromRequest(HttpServletRequest request) {

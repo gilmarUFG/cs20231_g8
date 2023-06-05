@@ -10,4 +10,6 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     User findByLogin(String login);
 
+    boolean existsByLogin(String login);
+
 }

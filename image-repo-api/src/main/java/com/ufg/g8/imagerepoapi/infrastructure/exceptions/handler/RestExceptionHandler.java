@@ -1,9 +1,6 @@
 package com.ufg.g8.imagerepoapi.infrastructure.exceptions.handler;
 
-import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
-import com.ufg.g8.imagerepoapi.infrastructure.exceptions.FileIOException;
-import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
-import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
+import com.ufg.g8.imagerepoapi.infrastructure.exceptions.*;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.details.ExceptionDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +12,20 @@ import java.util.Arrays;
 
 @ControllerAdvice
 public class RestExceptionHandler {
+
+    @ExceptionHandler(ActionNotAllowedException.class)
+    public ResponseEntity<ExceptionDetails> handleActionNotAllowedException(ActionNotAllowedException exception){
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Ação não permitida")
+                        .status(HttpStatus.FORBIDDEN.value())
+                        .details(exception.getMessage())
+                        .developerMessage(ActionNotAllowedException.EXCEPTION_DEVELOPER_MESSAGE)
+                        .className(Arrays.stream(exception.getStackTrace()).findFirst().get().getClassName())
+                        .timestamp(LocalDateTime.now())
+                        .build(), HttpStatus.FORBIDDEN
+        );
+    }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<ExceptionDetails> handleDuplicateKeyException(DuplicateKeyException exception){

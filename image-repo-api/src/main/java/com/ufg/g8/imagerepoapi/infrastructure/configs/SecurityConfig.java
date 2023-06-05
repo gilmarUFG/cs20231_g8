@@ -23,9 +23,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/public/**", "/users/login", "/files").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .requestMatchers("/users/login").permitAll()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

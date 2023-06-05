@@ -8,16 +8,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Document(collection = "medias")
-public class File extends BaseEntity {
+@Document(collection = "files")
+public class MediaFile extends BaseEntity {
 
     @NotNull
-    private String fileName;
+    private String name;
 
     @NotNull
-    private int size;
+    private long size;
 
     @NotNull
     private String type;
+
+    @NotNull
+    private byte[] data;
 
 }

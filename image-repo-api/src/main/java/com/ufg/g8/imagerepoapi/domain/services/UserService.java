@@ -4,6 +4,7 @@ import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import com.ufg.g8.imagerepoapi.domain.models.User;
 import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
 import com.ufg.g8.imagerepoapi.domain.repositories.UserRepository;
+import com.ufg.g8.imagerepoapi.infrastructure.exceptions.ActionNotAllowedException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.security.JwtAuthenticationProvider;
@@ -35,8 +36,10 @@ public class UserService implements IUserService {
 
     public TokenDto login(CredentialsDto credentials) {
         User user = userRepository.findByLogin(credentials.getLogin());
-        //if(!EncryptUtils.matchTextWithEncoded(credentials.getPassword(), user.getPassword()))
-
+        if(user == null)
+            throw new ActionNotAllowedException("Usuário inválido ou não existe");
+        if(!EncryptUtils.matchTextWithEncoded(credentials.getPassword(), user.getPassword()))
+            throw new ActionNotAllowedException("Senha inválida");
         return new TokenDto(jwtAuthenticationProvider.generateToken(credentials.getLogin()));
     }
 

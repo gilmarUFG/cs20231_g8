@@ -4,7 +4,7 @@ import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.FileIOException;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
-import com.ufg.g8.imagerepoapi.presentation.services.IFileService;
+import com.ufg.g8.imagerepoapi.presentation.services.IMediaFileService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.Base64;
 import java.util.Optional;
 
 @Service
-public class MediaFileService implements IFileService {
+public class MediaFileService implements IMediaFileService {
 
     private static final String DEFAULT_FILE_TYPE = "image";
 

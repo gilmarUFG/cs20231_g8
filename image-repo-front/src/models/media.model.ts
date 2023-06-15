@@ -1,15 +1,15 @@
 import BaseEntity from "./base.entity.model";
 import User from "./user.model";
-import File from "./file.model";
+import MediaFile from "./mediafile.model";
 import Categories from "./category.model";
 
-export default class Image extends BaseEntity {
+export default class Media extends BaseEntity {
     name: string;
     description: string;
     views: number;
     downloads: number;
     author: User;
-    file: File;
+    mediaFile: MediaFile;
     categories: Categories[];
 
     constructor(
@@ -19,7 +19,7 @@ export default class Image extends BaseEntity {
         views: number,
         downloads: number,
         author: User,
-        file: File,
+        mediaFile: MediaFile,
         categories: Categories[],
         updatedAt: Date,
         createdAt: Date
@@ -30,7 +30,7 @@ export default class Image extends BaseEntity {
         this.views = views;
         this.downloads = downloads;
         this.author = author;
-        this.file = file;
+        this.mediaFile = mediaFile;
         this.categories = categories;
     }
 }

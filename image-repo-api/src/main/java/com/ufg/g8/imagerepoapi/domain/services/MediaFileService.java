@@ -3,6 +3,7 @@ package com.ufg.g8.imagerepoapi.domain.services;
 import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.FileIOException;
+import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaFileService;
 import org.springframework.beans.BeanUtils;
@@ -38,7 +39,7 @@ public class MediaFileService implements IMediaFileService {
         String fileType = Optional.ofNullable(file.getContentType()).orElse(DEFAULT_FILE_TYPE);
         MediaFile newMediaFile = this.createFile(file, fileType);
         newMediaFile = this.mediaFileRepository.save(newMediaFile);
-        return createFileDto(newMediaFile);
+        return AppModelMapper.mapModelToDto(newMediaFile);
     }
 
     private MediaFile createFile(MultipartFile file, String fileType) {
@@ -56,13 +57,6 @@ public class MediaFileService implements IMediaFileService {
         } catch (IOException exception) {
             throw new FileIOException("Erro ao salvar o arquivo da imagem");
         }
-    }
-
-    private MediaFileDto createFileDto(MediaFile mediaFile) {
-        MediaFileDto mediaFileDto = new MediaFileDto();
-        BeanUtils.copyProperties(mediaFile, mediaFileDto);
-        mediaFileDto.setBase64(Base64.getEncoder().encodeToString(mediaFile.getData()));
-        return mediaFileDto;
     }
 
     private void checkFileType(String fileType) {

@@ -5,6 +5,7 @@ import com.ufg.g8.imagerepoapi.domain.repositories.TagRepository;
 import com.ufg.g8.imagerepoapi.infrastructure.enums.TagColors;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
+import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import com.ufg.g8.imagerepoapi.presentation.services.ITagService;
 import org.springframework.beans.BeanUtils;
@@ -28,21 +29,13 @@ public class TagService implements ITagService {
         TagColors color = this.getRandomColor();
         Tag newTag = new Tag(tag, color);
         Tag savedTag = this.tagRepository.save(newTag);
-        return this.mapModelToDto(savedTag);
+        return AppModelMapper.mapModelToDto(savedTag);
     }
 
     private TagDto getTagByText(String tag) {
         Tag savedTag = this.tagRepository.findByTag(tag)
                 .orElseThrow(() -> new NotFoundException("Tag não encontrada"));
-        return this.mapModelToDto(savedTag);
-    }
-
-    private TagDto mapModelToDto(Tag tag) {
-        TagDto tagDto = new TagDto();
-        BeanUtils.copyProperties(tag, tagDto);
-        tagDto.setTagBackground(tag.getColor().getBackgroundColor());
-        tagDto.setTagTextColor(tag.getColor().getTextColor());
-        return tagDto;
+        return AppModelMapper.mapModelToDto(savedTag);
     }
 
     private TagColors getRandomColor() {

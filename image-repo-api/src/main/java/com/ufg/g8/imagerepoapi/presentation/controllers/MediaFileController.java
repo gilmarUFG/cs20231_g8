@@ -1,7 +1,7 @@
 package com.ufg.g8.imagerepoapi.presentation.controllers;
 
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
-import com.ufg.g8.imagerepoapi.presentation.services.IFileService;
+import com.ufg.g8.imagerepoapi.presentation.services.IMediaFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MediaFileController {
 
     @Autowired
-    private IFileService fileService;
+    private IMediaFileService fileService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,4 +1,4 @@
-import File from "./file.model";
+import MediaFile from "./mediafile.model";
 import BaseEntity from "./base.entity.model";
 
 export default class User extends BaseEntity {

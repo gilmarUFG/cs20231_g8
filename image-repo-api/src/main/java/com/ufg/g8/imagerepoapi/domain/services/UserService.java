@@ -84,7 +84,7 @@ public class UserService implements IUserService {
                 "updatedAt",
                 "createdAt"
         );
-        if(userDto.getProfilePictureId() != null && userDto.getProfilePictureId() != user.getProfilePicture().getId()) {
+        if(userDto.getProfilePictureId() != null && (user.getProfilePicture() == null || userDto.getProfilePictureId() != user.getProfilePicture().getId())) {
             MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
             user.setProfilePicture(mediaFile);

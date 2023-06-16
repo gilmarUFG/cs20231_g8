@@ -2,16 +2,18 @@ package com.ufg.g8.imagerepoapi.domain.services;
 
 import com.ufg.g8.imagerepoapi.domain.models.*;
 import com.ufg.g8.imagerepoapi.domain.repositories.*;
+import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
+import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
-import com.ufg.g8.imagerepoapi.presentation.services.ITagService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MediaService implements IMediaService {
@@ -37,32 +39,44 @@ public class MediaService implements IMediaService {
         media.setDescription(mediaDto.getDescription());
         media.setViews(0);
         media.setDownloads(0);
+        if(mediaDto.getAuthorId() == null)
+            throw new InvalidValueException("Autor não foi vinculado à imagem");
         User user = this.userRepository.findById(mediaDto.getAuthorId())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
         media.setAuthor(user);
+        if(mediaDto.getFileId() == null)
+            throw new InvalidValueException("É necessário inserir um arquivo de imagem");
         MediaFile mediaFile = this.mediaFileRepository.findById(mediaDto.getFileId())
                 .orElseThrow(() -> new NotFoundException("Arquivo não encontrado"));
         media.setMediaFile(mediaFile);
         Media savedMedia = this.mediaRepository.save(media);
-        mediaDto.getTagsId().forEach(tagId -> this.linkMediaToTag(savedMedia, tagId));
+        if(mediaDto.getTagsId() != null)
+            mediaDto.getTagsId().forEach(tagId -> this.linkMediaToTag(savedMedia, tagId));
     }
 
     public MediaDto read(ObjectId id) {
         Media media = this.mediaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
-        return this.mapModelToDto(media);
+        return AppModelMapper.mapModelToDto(media);
     }
 
     public void update(ObjectId id, MediaDto mediaDto) {
-        Media media = new Media();
+        Media media = this.mediaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
         media.setName(mediaDto.getName());
         media.setDescription(mediaDto.getDescription());
         ObjectId mediaFileId = mediaDto.getFileId();
-        if(mediaFileId != null && media.getMediaFile().getId() != mediaFileId) {
+        if(mediaFileId != null && !media.getMediaFile().getId().equals(mediaFileId)) {
             MediaFile mediaFile = this.mediaFileRepository.findById(mediaFileId)
                     .orElseThrow(() -> new NotFoundException("Arquivo não encontrado"));
             media.setMediaFile(mediaFile);
         }
+        media.getCategories()
+                .stream()
+                .map(Category::getTag)
+                .map(Tag::getId)
+                .filter(tagId -> mediaDto.getTagsId().contains(tagId))
+                .forEach(tagId -> this.linkMediaToTag(media, tagId));
         this.mediaRepository.save(media);
     }
 
@@ -71,12 +85,6 @@ public class MediaService implements IMediaService {
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
         this.categoryRepository.deleteAllByMedia(media);
         this.mediaRepository.deleteById(id);
-    }
-
-    private MediaDto mapModelToDto(Media media) {
-        MediaDto mediaDto = new MediaDto();
-        BeanUtils.copyProperties(media, mediaDto);
-        return mediaDto;
     }
 
     private void linkMediaToTag(Media media, ObjectId tagId) {

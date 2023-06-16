@@ -1,5 +1,6 @@
 package com.ufg.g8.imagerepoapi.presentation.dtos;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
@@ -13,8 +14,10 @@ public class MediaDto {
 
     private String id;
 
+    @NotNull
     private String name;
 
+    @NotNull
     private String description;
 
     private Integer views;
@@ -22,6 +25,8 @@ public class MediaDto {
     private Integer downloads;
 
     private String authorName;
+
+    private ObjectId authorId;
 
     private List<ObjectId> tagsId;
 

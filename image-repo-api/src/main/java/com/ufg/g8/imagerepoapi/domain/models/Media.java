@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,6 +34,6 @@ public class Media extends BaseEntity {
     private MediaFile mediaFile;
 
     @DBRef
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
 }

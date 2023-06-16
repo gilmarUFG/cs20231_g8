@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,7 +24,7 @@ public class Tag extends BaseEntity {
     private TagColors color;
 
     @DBRef
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     public Tag(String tag, TagColors color) {
         this.setTag(tag);

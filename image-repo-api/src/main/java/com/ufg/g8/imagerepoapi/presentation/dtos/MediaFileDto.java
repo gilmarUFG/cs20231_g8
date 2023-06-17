@@ -2,13 +2,12 @@ package com.ufg.g8.imagerepoapi.presentation.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 
 import java.util.Date;
 
 @Getter
 @Setter
-public class FileDto {
+public class MediaFileDto {
 
     private String id;
 

@@ -2,12 +2,15 @@ package com.ufg.g8.imagerepoapi.presentation.controllers;
 
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.print.Pageable;
 
 @RestController
 @RequestMapping(value = "/images")
@@ -39,5 +42,12 @@ public class MediaController {
     private void delete(@PathVariable(name = "id") ObjectId id) {
         this.mediaService.delete(id);
     }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    private Pageable readAll(@RequestParam(name="text") String text, HttpServletRequest request) {
+
+    }
+
 
 }

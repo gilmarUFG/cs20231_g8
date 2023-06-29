@@ -1,14 +1,14 @@
 package com.ufg.g8.imagerepoapi.infrastructure.enums;
 
-public enum TagColors {
+public enum TagColor {
 
     BLACK("black", "white");
 
-    private String backgroundColor;
+    private final String backgroundColor;
 
-    private String textColor;
+    private final String textColor;
 
-    TagColors(String backgroundColor, String textColor) {
+    TagColor(String backgroundColor, String textColor) {
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
     }

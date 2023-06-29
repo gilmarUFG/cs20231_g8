@@ -1,6 +1,7 @@
 package com.ufg.g8.imagerepoapi.presentation.controllers;
 
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
+import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import jakarta.validation.Valid;
 import org.bson.types.ObjectId;
@@ -38,6 +39,12 @@ public class MediaController {
     @ResponseStatus(HttpStatus.OK)
     private void delete(@PathVariable(name = "id") ObjectId id) {
         this.mediaService.delete(id);
+    }
+
+    @PostMapping(value = "/report/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    private void report(@PathVariable(name = "id") ObjectId id, @RequestParam(name = "user") ObjectId userId, @RequestBody @Valid ReportDto reportDto) {
+        this.mediaService.report(id, userId, reportDto);
     }
 
 }

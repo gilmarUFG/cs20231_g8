@@ -8,10 +8,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 public class UserDto {
+
     private String id;
 
     @NotNull
@@ -25,7 +27,10 @@ public class UserDto {
 
     private ObjectId profilePictureId;
 
+    private List<ReportDto> reports;
+
     private Date updatedAt;
 
     private Date createdAt;
+    
 }

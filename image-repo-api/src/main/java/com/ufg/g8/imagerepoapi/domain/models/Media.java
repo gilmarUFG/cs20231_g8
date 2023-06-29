@@ -1,5 +1,6 @@
 package com.ufg.g8.imagerepoapi.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufg.g8.imagerepoapi.infrastructure.base.BaseEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -35,5 +36,8 @@ public class Media extends BaseEntity {
 
     @DBRef
     private List<Category> categories = new ArrayList<>();
+
+    @DBRef
+    private List<MediaReport> reports;
 
 }

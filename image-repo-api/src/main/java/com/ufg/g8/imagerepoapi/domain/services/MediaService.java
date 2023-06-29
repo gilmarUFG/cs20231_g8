@@ -75,7 +75,9 @@ public class MediaService implements IMediaService {
         if(mediaFileId != null && !media.getMediaFile().getId().equals(mediaFileId)) {
             MediaFile mediaFile = this.mediaFileRepository.findById(mediaFileId)
                     .orElseThrow(() -> new NotFoundException("Arquivo não encontrado"));
+            ObjectId toBeDeletedId = media.getMediaFile().getId();
             media.setMediaFile(mediaFile);
+            this.mediaFileRepository.deleteById(toBeDeletedId);
         }
         media.getCategories()
                 .stream()

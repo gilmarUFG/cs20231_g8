@@ -93,7 +93,9 @@ public class UserService implements IUserService {
         if(userDto.getProfilePictureId() != null && (user.getProfilePicture() == null || userDto.getProfilePictureId() != user.getProfilePicture().getId())) {
             MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
+            ObjectId toBeDeletedId = user.getProfilePicture().getId();
             user.setProfilePicture(mediaFile);
+            this.mediaFileRepository.deleteById(toBeDeletedId);
         }
         this.userRepository.save(user);
     }

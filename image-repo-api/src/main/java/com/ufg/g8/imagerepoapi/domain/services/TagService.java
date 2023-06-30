@@ -2,13 +2,12 @@ package com.ufg.g8.imagerepoapi.domain.services;
 
 import com.ufg.g8.imagerepoapi.domain.models.Tag;
 import com.ufg.g8.imagerepoapi.domain.repositories.TagRepository;
-import com.ufg.g8.imagerepoapi.infrastructure.enums.TagColors;
+import com.ufg.g8.imagerepoapi.infrastructure.enums.TagColor;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import com.ufg.g8.imagerepoapi.presentation.services.ITagService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,7 +25,7 @@ public class TagService implements ITagService {
             throw new InvalidValueException("O conteúdo da Tag está vazio");
         if(this.tagRepository.existsByTag(tag))
             return this.getTagByText(tag);
-        TagColors color = this.getRandomColor();
+        TagColor color = this.getRandomColor();
         Tag newTag = new Tag(tag, color);
         Tag savedTag = this.tagRepository.save(newTag);
         return AppModelMapper.mapModelToDto(savedTag);
@@ -38,8 +37,8 @@ public class TagService implements ITagService {
         return AppModelMapper.mapModelToDto(savedTag);
     }
 
-    private TagColors getRandomColor() {
-        TagColors[] colors = TagColors.values();
+    private TagColor getRandomColor() {
+        TagColor[] colors = TagColor.values();
         Random random = new Random();
         return colors[random.nextInt(colors.length)];
     }

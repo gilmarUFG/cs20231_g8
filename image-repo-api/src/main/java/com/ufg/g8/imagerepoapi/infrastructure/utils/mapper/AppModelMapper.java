@@ -3,6 +3,7 @@ package com.ufg.g8.imagerepoapi.infrastructure.utils.mapper;
 import com.ufg.g8.imagerepoapi.domain.models.*;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
+import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import org.springframework.beans.BeanUtils;
 
@@ -21,6 +22,11 @@ public class AppModelMapper {
                 .map(Category::getTag)
                 .map(AppModelMapper::mapModelToDto).toList();
         mediaDto.setTags(tags);
+        mediaDto.setReports(
+                media.getReports().stream()
+                        .map(AppModelMapper::mapModelToDto)
+                        .toList()
+        );
         return mediaDto;
     }
 
@@ -39,6 +45,13 @@ public class AppModelMapper {
         tagDto.setTagBackground(tag.getColor().getBackgroundColor());
         tagDto.setTagTextColor(tag.getColor().getTextColor());
         return tagDto;
+    }
+
+    public static ReportDto mapModelToDto(MediaReport report) {
+        ReportDto reportDto = new ReportDto();
+        reportDto.setReasons(report.getReasons());
+        reportDto.setDescription(report.getDescription());
+        return reportDto;
     }
 
 }

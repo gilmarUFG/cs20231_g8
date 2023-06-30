@@ -9,6 +9,7 @@ import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.security.JwtAuthenticationProvider;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.EncryptUtils;
+import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.CredentialsDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TokenDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
@@ -69,6 +70,11 @@ public class UserService implements IUserService {
         if(mediaFile != null)
             userDto.setProfilePictureId(mediaFile.getId());
         userDto.setPassword("");
+        userDto.setReports(
+                user.getReports().stream()
+                        .map(AppModelMapper::mapModelToDto)
+                        .toList()
+        );
         return userDto;
     }
 
@@ -87,7 +93,9 @@ public class UserService implements IUserService {
         if(userDto.getProfilePictureId() != null && (user.getProfilePicture() == null || userDto.getProfilePictureId() != user.getProfilePicture().getId())) {
             MediaFile mediaFile = this.mediaFileRepository.findById(userDto.getProfilePictureId())
                     .orElseThrow(() -> new NotFoundException(FILE_NOT_FOUND));
+            ObjectId toBeDeletedId = user.getProfilePicture().getId();
             user.setProfilePicture(mediaFile);
+            this.mediaFileRepository.deleteById(toBeDeletedId);
         }
         this.userRepository.save(user);
     }

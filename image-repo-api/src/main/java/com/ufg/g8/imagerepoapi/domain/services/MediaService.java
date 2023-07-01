@@ -2,6 +2,7 @@ package com.ufg.g8.imagerepoapi.domain.services;
 
 import com.ufg.g8.imagerepoapi.domain.models.*;
 import com.ufg.g8.imagerepoapi.domain.repositories.*;
+import com.ufg.g8.imagerepoapi.domain.services.filters.MediaFilter;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
@@ -10,6 +11,12 @@ import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +42,9 @@ public class MediaService implements IMediaService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public void create(MediaDto mediaDto) {
@@ -63,6 +73,14 @@ public class MediaService implements IMediaService {
         Media media = this.mediaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
         return AppModelMapper.mapModelToDto(media);
+    }
+
+    public List<MediaDto> readAll(MediaFilter filter) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").regex(filter.getName()));
+        query.addCriteria(Criteria.where("description").regex(filter.getDescription()));
+        List<Media> medias = mongoTemplate.find(query, Media.class);
+        return medias.stream().map(AppModelMapper::mapModelToDto).toList();
     }
 
     @Override

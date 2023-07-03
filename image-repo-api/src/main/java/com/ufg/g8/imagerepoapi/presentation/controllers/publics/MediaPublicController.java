@@ -2,6 +2,7 @@ package com.ufg.g8.imagerepoapi.presentation.controllers.publics;
 
 import com.ufg.g8.imagerepoapi.domain.services.filters.MediaFilter;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
+import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.List;
 @RequestMapping(value = "/public/images")
 public class MediaPublicController {
     @Autowired
-    private MediaPublicController mediaService;
+    private IMediaService mediaService;
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)

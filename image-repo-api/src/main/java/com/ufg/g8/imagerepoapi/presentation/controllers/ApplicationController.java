@@ -15,6 +15,12 @@ public class ApplicationController {
     @Autowired
     private IGenericEnumService genericEnumService;
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public String health() {
+        return "Pixel Port API Running!";
+    }
+
     @GetMapping("/enum/{enumType}")
     @ResponseStatus(HttpStatus.OK)
     public List<EnumDto> loadEnum(@PathVariable(name = "enumType") String enumType) {

@@ -7,7 +7,6 @@ import com.ufg.g8.imagerepoapi.domain.repositories.UserRepository;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.ActionNotAllowedException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
-import com.ufg.g8.imagerepoapi.infrastructure.security.JwtAuthenticationProvider;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.EncryptUtils;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.CredentialsDto;
@@ -17,17 +16,29 @@ import com.ufg.g8.imagerepoapi.presentation.services.IUserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 
     private static final String USER_NOT_FOUND = "Usuário não encontrado";
 
     private static final String FILE_NOT_FOUND = "Arquivo não encontrado";
-
-    @Autowired
-    private JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Autowired
     private UserRepository userRepository;
@@ -35,13 +46,16 @@ public class UserService implements IUserService {
     @Autowired
     private MediaFileRepository mediaFileRepository;
 
-    public TokenDto login(CredentialsDto credentials) {
-        User user = userRepository.findByLogin(credentials.getLogin());
-        if(user == null)
-            throw new ActionNotAllowedException("Usuário inválido ou não existe");
-        if(!EncryptUtils.matchTextWithEncoded(credentials.getPassword(), user.getPassword()))
-            throw new ActionNotAllowedException("Senha inválida");
-        return new TokenDto(jwtAuthenticationProvider.generateToken(credentials.getLogin()));
+    @Autowired
+    private JwtEncoder jwtEncoder;
+
+    public TokenDto login(Authentication authentication) {
+        Optional.ofNullable(authentication).orElseThrow(
+                () -> new ActionNotAllowedException("Autenticação não enviada")
+        );
+        User user = userRepository.findByLogin(authentication.getName())
+                .orElseThrow(() -> new ActionNotAllowedException("Usuário inválido ou não existe"));
+        return new TokenDto(this.generateToken(user));
     }
 
     public void create(UserDto userDto) {
@@ -104,9 +118,34 @@ public class UserService implements IUserService {
         this.userRepository.deleteById(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByLogin(username)
+                .orElseThrow(() -> new ActionNotAllowedException("Usuário inválido ou não existe"));
+    }
+
     private void verifyLogin(String login) {
         if(userRepository.existsByLogin(login))
             throw new DuplicateKeyException("O Login " + login + " já está em uso");
+    }
+
+    private String generateToken(User user) {
+        Instant now = Instant.now();
+        String scope = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .issuedAt(now)
+                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .subject(user.getLogin())
+                .claim("scope", scope)
+                .build();
+        JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(
+                JwsHeader.with(MacAlgorithm.HS512).build(),
+                claims
+        );
+        return this.jwtEncoder.encode(encoderParameters).getTokenValue();
     }
 
 }

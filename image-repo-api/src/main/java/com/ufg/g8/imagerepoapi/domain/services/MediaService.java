@@ -2,24 +2,34 @@ package com.ufg.g8.imagerepoapi.domain.services;
 
 import com.ufg.g8.imagerepoapi.domain.models.*;
 import com.ufg.g8.imagerepoapi.domain.repositories.*;
+import com.ufg.g8.imagerepoapi.domain.services.filters.MediaFilter;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
+import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import org.bson.types.ObjectId;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MediaService implements IMediaService {
 
     @Autowired
     private MediaRepository mediaRepository;
+
+    @Autowired
+    private MediaReportRepository mediaReportRepository;
 
     @Autowired
     private TagRepository tagRepository;
@@ -33,6 +43,10 @@ public class MediaService implements IMediaService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Override
     public void create(MediaDto mediaDto) {
         Media media = new Media();
         media.setName(mediaDto.getName());
@@ -54,12 +68,22 @@ public class MediaService implements IMediaService {
             mediaDto.getTagsId().forEach(tagId -> this.linkMediaToTag(savedMedia, tagId));
     }
 
+    @Override
     public MediaDto read(ObjectId id) {
         Media media = this.mediaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
         return AppModelMapper.mapModelToDto(media);
     }
 
+    public List<MediaDto> readAll(MediaFilter filter) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").regex(filter.getName()));
+        query.addCriteria(Criteria.where("description").regex(filter.getDescription()));
+        List<Media> medias = mongoTemplate.find(query, Media.class);
+        return medias.stream().map(AppModelMapper::mapModelToDto).toList();
+    }
+
+    @Override
     public void update(ObjectId id, MediaDto mediaDto) {
         Media media = this.mediaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
@@ -69,7 +93,9 @@ public class MediaService implements IMediaService {
         if(mediaFileId != null && !media.getMediaFile().getId().equals(mediaFileId)) {
             MediaFile mediaFile = this.mediaFileRepository.findById(mediaFileId)
                     .orElseThrow(() -> new NotFoundException("Arquivo não encontrado"));
+            ObjectId toBeDeletedId = media.getMediaFile().getId();
             media.setMediaFile(mediaFile);
+            this.mediaFileRepository.deleteById(toBeDeletedId);
         }
         media.getCategories()
                 .stream()
@@ -80,11 +106,30 @@ public class MediaService implements IMediaService {
         this.mediaRepository.save(media);
     }
 
+    @Override
     public void delete(ObjectId id) {
         Media media = this.mediaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
         this.categoryRepository.deleteAllByMedia(media);
         this.mediaRepository.deleteById(id);
+    }
+
+    @Override
+    public void report(ObjectId id, ObjectId userId, ReportDto reportDto) {
+        Media media = this.mediaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        MediaReport report = new MediaReport();
+        report.setReporter(user);
+        report.setMediaReported(media);
+        report.setDescription(reportDto.getDescription());
+        report.setReasons(reportDto.getReasons());
+        MediaReport savedReport = this.mediaReportRepository.save(report);
+        user.getReports().add(savedReport);
+        this.userRepository.save(user);
+        media.getReports().add(savedReport);
+        this.mediaRepository.save(media);
     }
 
     private void linkMediaToTag(Media media, ObjectId tagId) {

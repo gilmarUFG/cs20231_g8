@@ -36,6 +36,8 @@ public class MediaDto {
 
     private ObjectId fileId;
 
+    private List<ReportDto> reports;
+
     private Date updatedAt;
 
     private Date createdAt;

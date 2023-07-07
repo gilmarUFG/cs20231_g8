@@ -1,6 +1,8 @@
 package com.ufg.g8.imagerepoapi.presentation.controllers;
 
+import com.ufg.g8.imagerepoapi.domain.services.filters.MediaFilter;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
+import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import jakarta.validation.Valid;
 import org.bson.types.ObjectId;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/images")
@@ -28,6 +32,12 @@ public class MediaController {
         return this.mediaService.read(id);
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    private List<MediaDto> readAll(MediaFilter filter) {
+        return this.mediaService.readAll(filter);
+    }
+
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     private void update(@PathVariable(name = "id") ObjectId id, @RequestBody @Valid MediaDto mediaDto) {
@@ -38,6 +48,12 @@ public class MediaController {
     @ResponseStatus(HttpStatus.OK)
     private void delete(@PathVariable(name = "id") ObjectId id) {
         this.mediaService.delete(id);
+    }
+
+    @PostMapping(value = "/report/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    private void report(@PathVariable(name = "id") ObjectId id, @RequestParam(name = "user") ObjectId userId, @RequestBody @Valid ReportDto reportDto) {
+        this.mediaService.report(id, userId, reportDto);
     }
 
 }

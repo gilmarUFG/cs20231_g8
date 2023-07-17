@@ -142,7 +142,7 @@ public class UserService implements IUserService, UserDetailsService {
                 .claim("scope", scope)
                 .build();
         JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(
-                JwsHeader.with(MacAlgorithm.HS512).build(),
+                JwsHeader.with(MacAlgorithm.HS256).build(),
                 claims
         );
         return this.jwtEncoder.encode(encoderParameters).getTokenValue();

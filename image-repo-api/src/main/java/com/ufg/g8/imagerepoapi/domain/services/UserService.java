@@ -4,6 +4,8 @@ import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import com.ufg.g8.imagerepoapi.domain.models.User;
 import com.ufg.g8.imagerepoapi.domain.repositories.MediaFileRepository;
 import com.ufg.g8.imagerepoapi.domain.repositories.UserRepository;
+import com.ufg.g8.imagerepoapi.infrastructure.enums.ActionType;
+import com.ufg.g8.imagerepoapi.infrastructure.events.AuditEvent;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.ActionNotAllowedException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
@@ -15,6 +17,7 @@ import com.ufg.g8.imagerepoapi.presentation.services.IUserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,6 +49,9 @@ public class UserService implements IUserService, UserDetailsService {
     private MediaFileRepository mediaFileRepository;
 
     @Autowired
+    private ApplicationEventPublisher publisher;
+
+    @Autowired
     private JwtEncoder jwtEncoder;
 
     public TokenDto login(Authentication authentication) {
@@ -67,7 +73,16 @@ public class UserService implements IUserService, UserDetailsService {
             user.setProfilePicture(mediaFile);
         }
         user.setPassword(EncryptUtils.encode(user.getPassword()));
-        this.userRepository.save(user);
+        User saved = this.userRepository.save(user);
+        this.publisher.publishEvent(
+                new AuditEvent(
+                        this,
+                        saved,
+                        "USER",
+                        saved.getId(),
+                        ActionType.CREATE
+                )
+        );
     }
 
     public UserDto read(ObjectId id) {
@@ -110,11 +125,28 @@ public class UserService implements IUserService, UserDetailsService {
             user.setProfilePicture(mediaFile);
             this.mediaFileRepository.deleteById(toBeDeletedId);
         }
-        this.userRepository.save(user);
+        User saved = this.userRepository.save(user);
+        this.publisher.publishEvent(
+                new AuditEvent(
+                        this,
+                        saved,
+                        "USER",
+                        saved.getId(),
+                        ActionType.UPDATE
+                )
+        );
     }
 
     public void delete(ObjectId id) {
         this.userRepository.deleteById(id);
+        this.publisher.publishEvent(
+                new AuditEvent(
+                        this,
+                        "USER",
+                        id,
+                        ActionType.DELETE
+                )
+        );
     }
 
     @Override

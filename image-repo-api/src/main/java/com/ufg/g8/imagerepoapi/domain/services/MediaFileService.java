@@ -7,8 +7,7 @@ import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaFileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +32,9 @@ public class MediaFileService implements IMediaFileService {
 
     @Autowired
     private MediaFileRepository mediaFileRepository;
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Override
     public MediaFileDto create(MultipartFile file) {

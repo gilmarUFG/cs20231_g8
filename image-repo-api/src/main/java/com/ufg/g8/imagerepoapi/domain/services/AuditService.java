@@ -5,7 +5,6 @@ import com.ufg.g8.imagerepoapi.domain.models.User;
 import com.ufg.g8.imagerepoapi.domain.repositories.AuditRepository;
 import com.ufg.g8.imagerepoapi.domain.repositories.UserRepository;
 import com.ufg.g8.imagerepoapi.infrastructure.enums.ActionType;
-import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.presentation.services.IAuditService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class AuditService implements IAuditService {
                         .getContext()
                         .getAuthentication()
                         .getName()
-        ).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        ).orElse(new User());
     }
 
 }

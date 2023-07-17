@@ -3,6 +3,8 @@ package com.ufg.g8.imagerepoapi.domain.services;
 import com.ufg.g8.imagerepoapi.domain.models.*;
 import com.ufg.g8.imagerepoapi.domain.repositories.*;
 import com.ufg.g8.imagerepoapi.domain.services.filters.MediaFilter;
+import com.ufg.g8.imagerepoapi.infrastructure.enums.ActionType;
+import com.ufg.g8.imagerepoapi.infrastructure.events.AuditEvent;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.InvalidValueException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
@@ -11,6 +13,7 @@ import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -46,6 +49,9 @@ public class MediaService implements IMediaService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @Override
     public void create(MediaDto mediaDto) {
         Media media = new Media();
@@ -66,6 +72,15 @@ public class MediaService implements IMediaService {
         Media savedMedia = this.mediaRepository.save(media);
         if(mediaDto.getTagsId() != null)
             mediaDto.getTagsId().forEach(tagId -> this.linkMediaToTag(savedMedia, tagId));
+        this.publisher.publishEvent(
+                new AuditEvent(
+                        this,
+                        savedMedia,
+                        "MEDIA",
+                        savedMedia.getId(),
+                        ActionType.CREATE
+                )
+        );
     }
 
     @Override
@@ -103,7 +118,16 @@ public class MediaService implements IMediaService {
                 .map(Tag::getId)
                 .filter(tagId -> mediaDto.getTagsId().contains(tagId))
                 .forEach(tagId -> this.linkMediaToTag(media, tagId));
-        this.mediaRepository.save(media);
+        Media savedMedia = this.mediaRepository.save(media);
+        this.publisher.publishEvent(
+                new AuditEvent(
+                        this,
+                        savedMedia,
+                        "MEDIA",
+                        savedMedia.getId(),
+                        ActionType.CREATE
+                )
+        );
     }
 
     @Override
@@ -112,6 +136,14 @@ public class MediaService implements IMediaService {
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
         this.categoryRepository.deleteAllByMedia(media);
         this.mediaRepository.deleteById(id);
+        this.publisher.publishEvent(
+                new AuditEvent(
+                        this,
+                        "MEDIA",
+                        id,
+                        ActionType.CREATE
+                )
+        );
     }
 
     @Override

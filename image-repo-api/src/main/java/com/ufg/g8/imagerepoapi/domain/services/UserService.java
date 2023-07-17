@@ -9,7 +9,6 @@ import com.ufg.g8.imagerepoapi.infrastructure.exceptions.DuplicateKeyException;
 import com.ufg.g8.imagerepoapi.infrastructure.exceptions.NotFoundException;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.EncryptUtils;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
-import com.ufg.g8.imagerepoapi.presentation.dtos.CredentialsDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TokenDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IUserService;

@@ -79,8 +79,8 @@ O deploy da API será feito na plataforma DigitalOcean.
 | --- |---|---|---|---|
 | 1 | Especificar Escopo do Projeto e Requisitos | 17/04/2023 | 05/05/2023 | Concluída |
 | 2 | Definir Entidades e Estruturar Aplicações | 06/05/2023 | 19/05/2023 | Concluída |
-| 3 | CRUD de Usuários e Autenticação | 20/05/2023 | 02/06/2023 | Parcialmente Concluída |
+| 3 | CRUD de Usuários e Autenticação | 20/05/2023 | 02/06/2023 | Concluída |
 | 4 | CRUD de Imagens | 03/06/2023 | 16/06/2023 | Concluída |
 | 5 | Filtragem e Listagem de Imagens | 17/06/2023 | 30/06/2023 | Parcialmente Concluída |
-| 6 | Visualização e Download de Imagens, Testes Automatizados | 01/07/2023 | 21/07/2023 | Programada |
+| 6 | Visualização e Download de Imagens, Testes Automatizados | 01/07/2023 | 21/07/2023 | Em Andamento |
 | 7 | Deploy Automatizado | 22/07/2023 | 11/08/2023 | Programada |

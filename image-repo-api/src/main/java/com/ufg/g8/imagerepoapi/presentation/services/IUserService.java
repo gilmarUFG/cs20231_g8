@@ -5,12 +5,13 @@ import com.ufg.g8.imagerepoapi.presentation.dtos.CredentialsDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TokenDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
 import org.bson.types.ObjectId;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface IUserService {
 
-    TokenDto login(CredentialsDto credentialsDto);
+    TokenDto login(Authentication authentication);
 
     void create(UserDto userDto);
 

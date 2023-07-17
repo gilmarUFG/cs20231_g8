@@ -83,4 +83,18 @@ public class RestExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ProcessingException.class)
+    public ResponseEntity<ExceptionDetails> handleProcessingException(ProcessingException exception){
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Não Encontrado")
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .details(exception.getMessage())
+                        .developerMessage(NotFoundException.EXCEPTION_DEVELOPER_MESSAGE)
+                        .className(Arrays.stream(exception.getStackTrace()).findFirst().get().getClassName())
+                        .timestamp(LocalDateTime.now())
+                        .build(), HttpStatus.NOT_FOUND
+        );
+    }
+
 }

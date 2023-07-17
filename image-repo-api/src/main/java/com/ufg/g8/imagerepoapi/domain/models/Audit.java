@@ -1,9 +1,10 @@
 package com.ufg.g8.imagerepoapi.domain.models;
 
 import com.ufg.g8.imagerepoapi.infrastructure.base.BaseEntity;
-import lombok.AllArgsConstructor;
+import com.ufg.g8.imagerepoapi.infrastructure.enums.ActionType;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,9 +17,19 @@ public class Audit extends BaseEntity {
 
     private ObjectId entityId;
 
-    @DBRef
-    private User userId;
+    private ActionType action;
 
-    private Object json;
+    @DBRef
+    private User user;
+
+    private String json;
+
+    public Audit(String entity, ObjectId entityId, ActionType action, User user, String json) {
+        this.entity = entity;
+        this.entityId = entityId;
+        this.action = action;
+        this.user = user;
+        this.json = json;
+    }
 
 }

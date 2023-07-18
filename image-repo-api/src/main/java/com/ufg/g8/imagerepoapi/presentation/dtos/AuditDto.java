@@ -15,6 +15,8 @@ public class AuditDto {
 
     private String entityId;
 
+    private String action;
+
     private User user;
 
     private String json;

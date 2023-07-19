@@ -4,11 +4,11 @@ import MediaFile from "./mediafile.model";
 import Categories from "./category.model";
 
 export default class Media extends BaseEntity {
-    name: string;
+    name: string;   
     description: string;
     views: number;
     downloads: number;
-    author: User;
+    authorName: string;
     mediaFile: MediaFile;
     categories: Categories[];
 
@@ -18,7 +18,7 @@ export default class Media extends BaseEntity {
         description: string,
         views: number,
         downloads: number,
-        author: User,
+        authorName: string,
         mediaFile: MediaFile,
         categories: Categories[],
         updatedAt: Date,
@@ -29,7 +29,7 @@ export default class Media extends BaseEntity {
         this.description = description;
         this.views = views;
         this.downloads = downloads;
-        this.author = author;
+        this.authorName = authorName;
         this.mediaFile = mediaFile;
         this.categories = categories;
     }

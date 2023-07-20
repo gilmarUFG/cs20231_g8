@@ -6,8 +6,8 @@ import com.ufg.g8.imagerepoapi.infrastructure.exceptions.FileIOException;
 import com.ufg.g8.imagerepoapi.infrastructure.utils.mapper.AppModelMapper;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaFileDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaFileService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -33,6 +32,9 @@ public class MediaFileService implements IMediaFileService {
 
     @Autowired
     private MediaFileRepository mediaFileRepository;
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Override
     public MediaFileDto create(MultipartFile file) {

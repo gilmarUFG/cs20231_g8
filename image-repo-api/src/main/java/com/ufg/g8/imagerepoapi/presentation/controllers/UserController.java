@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +20,8 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public TokenDto login(@RequestBody @Valid CredentialsDto credentialsDto) {
-        return this.userService.login(credentialsDto);
+    public TokenDto login(Authentication authentication) {
+        return this.userService.login(authentication);
     }
 
     @PostMapping

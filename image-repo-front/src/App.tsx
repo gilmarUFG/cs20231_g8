@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {LayoutComponent, NavbarComponent} from './components';
+import {AboutPage, HomePage, TestPage, NotFoundPage} from './pages'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export interface IApplicationProps {}
+
+const App: React.FunctionComponent<IApplicationProps> = (props) => {
+    return (
+        <BrowserRouter>
+            <NavbarComponent/>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="about">
+                    <Route index element={<AboutPage />} />
+                    <Route path=":number" element={<AboutPage />} />
+                </Route>
+                <Route path="test" element={<TestPage />} />
+                <Route path="layout" element={<LayoutComponent />}>
+                    <Route index element={<AboutPage />} />
+                    <Route path=":number" element={<AboutPage />} />
+                </Route>
+                <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+        </BrowserRouter>
+
+    );
+};
 
 export default App;

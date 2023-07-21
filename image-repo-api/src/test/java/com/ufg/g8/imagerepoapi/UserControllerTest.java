@@ -1,11 +1,12 @@
 package com.ufg.g8.imagerepoapi;
 
+import com.ufg.g8.imagerepoapi.presentation.controllers.UserController;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TokenDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IUserService;
+
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(UserControllerTest.class)
+@WebMvcTest(UserController.class) // Corrected to UserController
 public class UserControllerTest {
 
     @Autowired
@@ -26,9 +27,6 @@ public class UserControllerTest {
 
     @Mock
     private IUserService userService;
-
-    @InjectMocks
-    private UserControllerTest userController;
 
     @Test
     @WithMockUser

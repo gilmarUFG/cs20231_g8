@@ -2,12 +2,10 @@ package com.ufg.g8.imagerepoapi;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufg.g8.imagerepoapi.presentation.controllers.TagController;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import com.ufg.g8.imagerepoapi.presentation.services.ITagService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,9 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import java.util.Date;
-
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(TagController.class)
@@ -50,7 +46,7 @@ public class TagControllerTest {
         expectedTagDto.setUpdatedAt(new Date());
         expectedTagDto.setCreatedAt(new Date());
 
-        // Mock the behavior of the tagService.create() method
+        // Mocka o comportamento do método tagService.create()
         when(tagService.create(text)).thenReturn(expectedTagDto);
 
         mockMvc.perform(post("/tags/{text}", text)
@@ -58,11 +54,12 @@ public class TagControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(asJsonString(expectedTagDto)));
 
+        // Verifica se o método tagService.create() foi chamado com os parâmetros corretos
         verify(tagService, times(1)).create(text);
         verifyNoMoreInteractions(tagService);
     }
 
-    // Helper method to convert object to JSON string
+    // Método auxiliar para converter o objeto para uma string JSON
     private String asJsonString(Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

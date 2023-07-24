@@ -1,12 +1,11 @@
-import axios, { AxiosResponse } from "axios"
+import { AxiosResponse } from "axios"
 import { EnumDto } from "../../models/enum.model";
-
-const apiUrl = process.env.API_URL;
+import api from "../axios/http-common";
 
 export const appHealth = (): Promise<AxiosResponse<string>> => {
-    return axios.get<string>(`${apiUrl}/app`);
+    return api.get<string>('/app');
 }
 
 export const loadEnum = (enumType: string): Promise<AxiosResponse<EnumDto>> => {
-    return axios.get<EnumDto>(`${apiUrl}/enum/${enumType}`);
+    return api.get<EnumDto>(`/enum/${enumType}`);
 }

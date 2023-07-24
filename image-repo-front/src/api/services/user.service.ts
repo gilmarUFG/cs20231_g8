@@ -1,20 +1,19 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import User from "../../models/user.model";
-
-const apiUrl = process.env.API_URL;
+import api from "../axios/http-common";
 
 export const createUser = (user: User): Promise<AxiosResponse<void>> => {
-    return axios.post(`${apiUrl}/users`, user);
+    return api.post<void>('/users', user);
 }
 
 export const readUser = (userId: string): Promise<AxiosResponse<User>> => {
-    return axios.get(`${apiUrl}/users/${userId}`);
+    return api.get<User>(`/users/${userId}`);
 }
 
 export const updateUser = (user: User): Promise<AxiosResponse<void>> => {
-    return axios.put(`${apiUrl}/users/${user.id}`, user);
+    return api.put<void>(`/users/${user.id}`, user);
 }
 
 export const deleteUser = (userId: string): Promise<AxiosResponse<void>> => {
-    return axios.delete(`${apiUrl}/users/${userId}`);
+    return api.delete<void>(`/users/${userId}`);
 }

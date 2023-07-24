@@ -87,7 +87,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionDetails> handleProcessingException(ProcessingException exception){
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
-                        .title("Não Encontrado")
+                        .title("Erro no Processamento de Dados")
                         .status(HttpStatus.BAD_REQUEST.value())
                         .details(exception.getMessage())
                         .developerMessage(NotFoundException.EXCEPTION_DEVELOPER_MESSAGE)

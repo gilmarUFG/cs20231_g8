@@ -3,7 +3,7 @@ import { onRequest } from "./request.interceptor";
 import { errorHandler, onResponse } from "./response.interceptor";
 
 const api = axios.create({
-    baseURL: process.env.API_URL
+    baseURL: "http://localhost:9090"
 });
 
 api.interceptors.request.use(onRequest);

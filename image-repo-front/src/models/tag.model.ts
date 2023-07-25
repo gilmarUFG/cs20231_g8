@@ -1,5 +1,4 @@
 import BaseEntity from "./base.entity.model";
-import Categories from "./category.model";
 
 export default class Tag extends BaseEntity {
     

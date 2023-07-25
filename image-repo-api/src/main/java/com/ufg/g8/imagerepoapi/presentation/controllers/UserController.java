@@ -32,19 +32,19 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto read(@PathVariable(name = "id")ObjectId id) throws Exception {
+    public UserDto read(@PathVariable(name = "id")ObjectId id) {
         return this.userService.read(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable(name = "id")ObjectId id, @RequestBody @Valid UserDto userDto) throws Exception {
+    public void update(@PathVariable(name = "id")ObjectId id, @RequestBody @Valid UserDto userDto) {
         this.userService.update(id, userDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable(name = "id")ObjectId id) {
+    public void delete(@PathVariable(name = "id")ObjectId id) {
         this.userService.delete(id);
     }
 }

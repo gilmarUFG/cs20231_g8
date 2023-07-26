@@ -1,11 +1,21 @@
-import AboutPage from "./AboutPage";
 import HomePage from "./HomePage";
+import ImagesPage from "./ImagesPage";
+import ImagePage from "./ImagePage";
+import AboutPage from "./AboutPage";
 import NotFoundPage from "./NotFoundPage";
 import TestPage from "./TestPage";
+import ProfilePage from "./ProfilePage";
+import LoginPage from "./LoginPage";
+import SignUpPage from "./SignUpPage";
 
 export {
-    AboutPage,
     HomePage,
+    ImagesPage,
+    ImagePage,
+    AboutPage,
+    ProfilePage,
     NotFoundPage,
-    TestPage
+    TestPage,
+    LoginPage,
+    SignUpPage
 }

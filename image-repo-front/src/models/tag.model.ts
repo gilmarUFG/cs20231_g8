@@ -1,22 +1,22 @@
 import BaseEntity from "./base.entity.model";
-import Categories from "./category.model";
 
 export default class Tag extends BaseEntity {
-    name: string;
-    color: string;
-    categories: Categories[];
+    
+    tag: string;
+    tagBackground: string;
+    tagTextColor: string;
 
     constructor(
-        id: string,
-        name: string,
-        color: string,
-        categories: Categories[],
-        updatedAt: Date,
-        createdAt: Date
+        id: string = '',
+        tag: string = '',
+        tagBackground: string = '',
+        tagTextColor: string = '',
+        updatedAt: Date = new Date(),
+        createdAt: Date = new Date()
     ) {
         super(id, updatedAt, createdAt);
-        this.name = name;
-        this.color = color;
-        this.categories = categories;
+        this.tag = tag;
+        this.tagBackground = tagBackground;
+        this.tagTextColor = tagTextColor;
     }
 }

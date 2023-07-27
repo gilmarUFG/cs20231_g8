@@ -15,9 +15,9 @@ public interface IUserService {
 
     void create(UserDto userDto);
 
-    UserDto read(ObjectId id) throws Exception;
+    UserDto read(ObjectId id);
 
-    void update(ObjectId id, UserDto userDto) throws Exception;
+    void update(ObjectId id, UserDto userDto);
 
     void delete(ObjectId id);
 }

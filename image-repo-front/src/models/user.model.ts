@@ -1,25 +1,30 @@
 import MediaFile from "./mediafile.model";
 import BaseEntity from "./base.entity.model";
+import { Report } from "./report.model";
 
 export default class User extends BaseEntity {
+
     login: string;
     password: string;
     name: string;
-    file: File;
+    profilePictureId: string;
+    reports: Report[];
 
     constructor(
-        login: string,
-        password: string,
-        name: string,
-        file: File,
-        id: string,
-        updatedAt: Date,
-        createdAt: Date
+        id: string = '',
+        login: string = '',
+        password: string = '',
+        name: string = '',
+        profilePictureId: string = '',
+        reports: Report[] = [],
+        updatedAt: Date = new Date(),
+        createdAt: Date = new Date()
     ) {
         super(id, updatedAt, createdAt);
         this.login = login;
         this.password = password;
         this.name = name;
-        this.file = file;
+        this.profilePictureId = profilePictureId;
+        this.reports = reports;
     }
 }

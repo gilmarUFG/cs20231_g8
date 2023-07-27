@@ -1,16 +1,21 @@
 import BaseEntity from "./base.entity.model";
-import User from "./user.model";
 import MediaFile from "./mediafile.model";
-import Categories from "./category.model";
+import Tag from "./tag.model";
+import { Report } from "./report.model";
 
 export default class Media extends BaseEntity {
-    name: string;
+    
+    name: string;   
     description: string;
     views: number;
     downloads: number;
-    author: User;
-    mediaFile: MediaFile;
-    categories: Categories[];
+    authorName: string;
+    authorId: string;
+    tagsId: string[];
+    tags: Tag[];
+    file: MediaFile;
+    fileId: string;
+    reports: Report[];
 
     constructor(
         id: string,
@@ -18,9 +23,13 @@ export default class Media extends BaseEntity {
         description: string,
         views: number,
         downloads: number,
-        author: User,
-        mediaFile: MediaFile,
-        categories: Categories[],
+        authorName: string = '',
+        authorId: string = '',
+        tagsId: string[] = [],
+        tags: Tag[] = [],
+        file: MediaFile = new MediaFile(),
+        fileId: string = '',
+        reports: Report[] = [],
         updatedAt: Date,
         createdAt: Date
     ) {
@@ -29,8 +38,12 @@ export default class Media extends BaseEntity {
         this.description = description;
         this.views = views;
         this.downloads = downloads;
-        this.author = author;
-        this.mediaFile = mediaFile;
-        this.categories = categories;
+        this.authorName = authorName;
+        this.authorId = authorId;
+        this.tagsId = tagsId;
+        this.tags = tags;
+        this.file = file;
+        this.fileId = fileId;
+        this.reports = reports;
     }
 }

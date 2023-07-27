@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import {LayoutComponent, NavbarComponent} from './components';
 import {AboutPage, HomePage, TestPage, NotFoundPage, ImagesPage, ImagePage, ProfilePage, LoginPage, SignUpPage} from './pages'
 import { ToastContainer } from 'react-toastify';
+import Footer from './components/organisms/Footer';
 
 export interface IApplicationProps {}
 
@@ -32,6 +33,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
                     <Route path="sign-up" element={<SignUpPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
+                <Footer />
             </BrowserRouter>
             <ToastContainer/>
         </>

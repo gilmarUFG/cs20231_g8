@@ -22,6 +22,9 @@ public class Tag extends BaseEntity {
     @NotNull
     private TagColor color;
 
+    @NotNull
+    private TagColor description;
+
     @DBRef
     private List<Category> categories = new ArrayList<>();
 

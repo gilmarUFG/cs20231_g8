@@ -23,4 +23,7 @@ public interface IMediaService {
 
     List<MediaDto> readAll(MediaFilter filter);
 
+    List<MediaDto> readAllByTag(String tagName);
+
+    List<MediaDto> readAllByTagDescription(String description);
 }

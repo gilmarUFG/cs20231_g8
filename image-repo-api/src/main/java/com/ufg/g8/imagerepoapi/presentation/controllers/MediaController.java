@@ -38,6 +38,12 @@ public class MediaController {
         return this.mediaService.readAll(filter);
     }
 
+    @GetMapping(value = "/bytag/{tagName}")
+    @ResponseStatus(HttpStatus.OK)
+    private List<MediaDto> readAllByTag(@PathVariable(name = "tagName") String tagName) {
+        return this.mediaService.readAllByTag(tagName);
+    }
+
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     private void update(@PathVariable(name = "id") ObjectId id, @RequestBody @Valid MediaDto mediaDto) {

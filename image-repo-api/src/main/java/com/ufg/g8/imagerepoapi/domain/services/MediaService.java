@@ -105,6 +105,13 @@ public class MediaService implements IMediaService {
         return medias.stream().map(AppModelMapper::mapModelToDto).toList();
     }
 
+    public List<MediaDto> readAllByTagDescription(String description) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("categories.tag.description").regex(description, "i")); // "i" for case-insensitive
+        List<Media> medias = mongoTemplate.find(query, Media.class);
+        return medias.stream().map(AppModelMapper::mapModelToDto).toList();
+    }
+
     @Override
     public void update(ObjectId id, MediaDto mediaDto) {
         Media media = this.mediaRepository.findById(id)

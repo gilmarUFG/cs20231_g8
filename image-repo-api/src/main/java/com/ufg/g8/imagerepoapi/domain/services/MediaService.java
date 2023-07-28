@@ -164,17 +164,29 @@ public class MediaService implements IMediaService {
     public void report(ObjectId id, ObjectId userId, ReportDto reportDto) {
         Media media = this.mediaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
+
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
         MediaReport report = new MediaReport();
         report.setReporter(user);
         report.setMediaReported(media);
         report.setDescription(reportDto.getDescription());
         report.setReasons(reportDto.getReasons());
+
         MediaReport savedReport = this.mediaReportRepository.save(report);
-        user.getReports().add(savedReport);
+
+        addReportToUser(user, savedReport);
+        addReportToMedia(media, savedReport);
+    }
+
+    private void addReportToUser(User user, MediaReport report) {
+        user.getReports().add(report);
         this.userRepository.save(user);
-        media.getReports().add(savedReport);
+    }
+
+    private void addReportToMedia(Media media, MediaReport report) {
+        media.getReports().add(report);
         this.mediaRepository.save(media);
     }
 

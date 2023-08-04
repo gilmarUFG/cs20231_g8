@@ -1,13 +1,25 @@
 import { styled } from "styled-components"
+import { AppContainer } from "../../molecules";
 
 type AdvantagesSectionProps = {}
 
-const AdvantagesSection: React.FunctionComponent = (props) => {
-    return <></>
-}
-
-const StyledAdvantagesSection = styled(AdvantagesSection)`
+const StyledAdvantagesSection = styled.section`
 
 `;
 
-export default StyledAdvantagesSection;
+const AdvantagesSection: React.FunctionComponent<AdvantagesSectionProps> = (props) => {
+    return (
+        <StyledAdvantagesSection>
+            <AppContainer>
+                <h2>
+                    Por quê o PixelPort?
+                </h2>
+                <h5>
+                    Quais são os nossos diferenciais?
+                </h5>
+            </AppContainer>
+        </StyledAdvantagesSection>
+    );
+}
+
+export default AdvantagesSection;

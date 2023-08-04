@@ -59,7 +59,7 @@ public class UserService implements IUserService, UserDetailsService {
                 () -> new ActionNotAllowedException("Autenticação não enviada")
         );
         User user = userRepository.findByLogin(authentication.getName())
-                .orElseThrow(() -> new ActionNotAllowedException("Usuário inválido ou não existe"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
         return new TokenDto(this.generateToken(user));
     }
 

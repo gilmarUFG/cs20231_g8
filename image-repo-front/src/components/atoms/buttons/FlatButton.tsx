@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const FlatButton = styled.button<{ secondary?: boolean; }>`
+const FlatButton = styled.button<{ $secondary?: boolean; }>`
     min-width: 96px;
     padding: 8px 20px;
     background-color: #2491ff;
@@ -25,7 +25,7 @@ const FlatButton = styled.button<{ secondary?: boolean; }>`
         }
     }
     ${ props =>
-        props.secondary &&
+        props?.$secondary &&
             `
                 background-color: white;
                 border: 2px solid #2491ff;

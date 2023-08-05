@@ -7,7 +7,7 @@ type FooterProps = {}
 const StyledFooter = styled.footer`
     max-width: 1280px;
     margin: 0 auto;
-    padding: 24px 100px;
+    padding: 24px 0;
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -39,7 +39,7 @@ const Footer: React.FunctionComponent<FooterProps> = (props) => {
                         Explore e Conquiste: <br/>A Plataforma Definitiva para Publicação de Imagens!
                     </h5>
                 </div>
-                <Navigation flexColumn />
+                <Navigation $flexcolumn />
             </section>
             <Divider />
             <h6>

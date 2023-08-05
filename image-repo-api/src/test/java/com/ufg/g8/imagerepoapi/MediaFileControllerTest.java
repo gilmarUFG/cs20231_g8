@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.FileInputStream;
+
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -41,23 +41,15 @@ public class MediaFileControllerTest {
     @Test
     public void createTest() throws Exception {
         // Criação de um objeto MultipartFile para simular o arquivo enviado na requisição
-        MultipartFile file = new MockMultipartFile("file", "test.png", "image/png", new FileInputStream("filepath"));
+        MultipartFile file = new MockMultipartFile("file", "test.png", "image/png", getClass().getResourceAsStream("/test.png"));
 
         // Criação de um objeto MediaFileDto para simular o resultado esperado do serviço
         MediaFileDto expectedResult = new MediaFileDto();
         when(fileServiceMock.create(file)).thenReturn(expectedResult);
 
-        // Criação do objeto MockMultipartFile para representar o arquivo enviado na requisição
-        MockMultipartFile mockFile = new MockMultipartFile(
-            file.getName(),
-            file.getOriginalFilename(),
-            file.getContentType(),
-            file.getInputStream()
-        );
-
         // Execução do teste para verificar se o endpoint "/files" cria o arquivo corretamente
         mockMvc.perform(MockMvcRequestBuilders.multipart("/files")
-                .file(mockFile))
+                        .file("file", file.getBytes()))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().json(expectedResult.toString()));
 

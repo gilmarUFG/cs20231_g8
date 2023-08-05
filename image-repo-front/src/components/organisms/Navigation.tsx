@@ -2,10 +2,10 @@ import { NavLink } from "react-router-dom";
 import { styled } from "styled-components";
 
 type NavigationProps = {
-    flexColumn?: boolean;
+   $flexcolumn?: boolean;
 };
 
-const StyledNavigation = styled.nav< {flexColumn?: boolean} >`ul {
+const StyledNavigation = styled.nav< {$flexcolumn?: boolean} >`ul {
     display: flex;
     align-items: center;
     gap: 24px;
@@ -24,7 +24,7 @@ const StyledNavigation = styled.nav< {flexColumn?: boolean} >`ul {
         }
     }
     ${props => 
-        props.flexColumn &&
+        props.$flexcolumn &&
             `
                 flex-direction: column;
                 align-items: flex-start;
@@ -35,7 +35,7 @@ const StyledNavigation = styled.nav< {flexColumn?: boolean} >`ul {
 
 const Navigation: React.FunctionComponent<NavigationProps> = (props) => {
     return (
-        <StyledNavigation flexColumn={props.flexColumn}>
+        <StyledNavigation $flexcolumn={props.$flexcolumn}>
             <ul>
                 <li>
                     <NavLink to="/">Home</NavLink>

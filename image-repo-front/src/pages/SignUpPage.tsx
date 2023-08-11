@@ -6,7 +6,6 @@ type SignUpPageProps = {};
 const StyledSignUpPage = styled.section`
     width: 100%;
     padding: 144px 72px 72px 72px;
-    background-image: url("./../assets/svgs/meteor-bg.svg");
     > div {
         display: flex;
         justify-content: space-between;

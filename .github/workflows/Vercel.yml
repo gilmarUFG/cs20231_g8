@@ -1,46 +1,21 @@
-name: Vercel
+name: Vercel Preview Deployment
+env:
+  VERCEL_ORG_ID: DManj4yLeUapRIs6zvt5Rik5  
+  VERCEL_PROJECT_ID: prj_vXNjNkj1Qtf4AwyDx4zSKjsXrbo8
 on:
   push:
-    branches:
+    branches-ignore:
       - develop
-  pull_request_target:
-
 jobs:
-  angular:
+  Deploy-Preview:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: build
-        run: |
-          cd example/angular
-          npm ci
-          npx ng build --prod
-
-      - uses: ./
-        id: vercel-action-staging
-        if: github.event_name == 'pull_request_target'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-token: 1bSZ5UeO8EQ4QglwvyMkK199 
-          vercel-org-id: DManj4yLeUapRIs6zvt5Rik5  
-          vercel-project-id: prj_vXNjNkj1Qtf4AwyDx4zSKjsXrbo8
-          working-directory: image-repo-front
-          alias-domains: |
-            staging.angular.vercel-action.amond.dev
-            pr-{{PR_NUMBER}}.angular.vercel-action.amond.dev
-      - uses: ./
-        id: vercel-action-production
-        if: github.event_name == 'push'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-token: 1bSZ5UeO8EQ4QglwvyMkK199 
-          vercel-org-id: DManj4yLeUapRIs6zvt5Rik5  
-          vercel-project-id: prj_vXNjNkj1Qtf4AwyDx4zSKjsXrbo8
-          working-directory: image-repo-front
-          vercel-args: '--prod '
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=1bSZ5UeO8EQ4QglwvyMkK199
+      - name: Build Project Artifacts
+        run: vercel build --token=1bSZ5UeO8EQ4QglwvyMkK199
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=1bSZ5UeO8EQ4QglwvyMkK199

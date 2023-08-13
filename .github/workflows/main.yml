@@ -19,5 +19,5 @@ jobs:
           vercel-token: 6agqSApTel9lww3GyymN0fNK # Required - Replace with your Vercel Token
           github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
           vercel-args: '--prod' # Optional
-          vercel-project-id: iKe5YxU3pArtlK7tJMNAKkeB7PZP # Required - Replace with your Vercel Project ID
+          vercel-project-id: prj_f1XhKW5YKj45l9dfKGvPi45FPrTk # Required - Replace with your Vercel Project ID
           working-directory: ./image-repo-api

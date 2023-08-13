@@ -1,24 +1,18 @@
-name: Deploy image-repo-api to Vercel
-
-on:
-  push:
-    branches:
-      - develop
-
+name: Deploy
+on: [pull_request]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy image-repo-api to Vercel
-        uses: amondnet/vercel-action@v20
+      - uses: actions/checkout@v2
+      #  your build commands
+      # - run: |
+      #    ng build --prod
+      - uses: amondnet/vercel-action@v20 #deploy
         with:
-          vercel-token: 6agqSApTel9lww3GyymN0fNK # Required - Replace with your Vercel Token
-          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
-          vercel-args: '--prod' # Optional
-          vercel-org-id: DManj4yLeUapRIs6zvt5Rik5 # Required - Replace with your Vercel Organization ID
-          vercel-project-id: prj_f1XhKW5YKj45l9dfKGvPi45FPrTk # Required - Replace with your Vercel Project ID
-          working-directory: ./cs20231_g8/image-repo-api
+          vercel-token: 1bSZ5UeO8EQ4QglwvyMkK199 # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
+          vercel-args: '--prod' #Optional
+          vercel-org-id: DManj4yLeUapRIs6zvt5Rik5  #Required
+          vercel-project-id: prj_vXNjNkj1Qtf4AwyDx4zSKjsXrbo8 #Required 
+          working-directory: ./image-repo-api

@@ -1,0 +1,24 @@
+name: Deploy image-repo-api to Vercel
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy image-repo-api to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.IsSuzgvlviFXSe0f1PQyV8i2 }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
+          vercel-args: '--prod' # Optional
+          vercel-org-id: ${{ secrets.ORG_ID }} # Required
+          vercel-project-id: ${{ secrets.prj_iKe5YxU3pArtlK7tJMNAKkeB7PZP }} # Required
+          working-directory: ./image-repo-api # Specify the path to your sub-directory

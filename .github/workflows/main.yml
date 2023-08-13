@@ -16,9 +16,8 @@ jobs:
       - name: Deploy image-repo-api to Vercel
         uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.6agqSApTel9lww3GyymN0fNK}} # Required
+          vercel-token: 6agqSApTel9lww3GyymN0fNK # Required - Replace with your Vercel Token
           github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
           vercel-args: '--prod' # Optional
-          vercel-org-id: ${{ secrets.ORG_ID }} # Required
-          vercel-project-id: ${{ secrets.prj_iKe5YxU3pArtlK7tJMNAKkeB7PZP }} # Required
-          working-directory: ./image-repo-api # Specify the path to your sub-directory
+          vercel-project-id: iKe5YxU3pArtlK7tJMNAKkeB7PZP # Required - Replace with your Vercel Project ID
+          working-directory: ./image-repo-api

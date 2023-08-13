@@ -21,4 +21,4 @@ jobs:
           vercel-args: '--prod' # Optional
           vercel-org-id: DManj4yLeUapRIs6zvt5Rik5 # Required - Replace with your Vercel Organization ID
           vercel-project-id: prj_f1XhKW5YKj45l9dfKGvPi45FPrTk # Required - Replace with your Vercel Project ID
-          working-directory: ./image-repo-api
+          working-directory: ./cs20231_g8/image-repo-api

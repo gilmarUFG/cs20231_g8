@@ -90,24 +90,23 @@ public class MediaService implements IMediaService {
         return AppModelMapper.mapModelToDto(media);
     }
 
+    @Override
     public List<MediaDto> readAll(MediaFilter filter) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("name").regex(filter.getName()));
-        query.addCriteria(Criteria.where("description").regex(filter.getDescription()));
-        List<Media> medias = mongoTemplate.find(query, Media.class);
-        return medias.stream().map(AppModelMapper::mapModelToDto).toList();
-    }
+        if (filter.getName() != null) {
+            query.addCriteria(Criteria.where("name").regex(filter.getName()));
+        }
+        if (filter.getDescription() != null) {
+            query.addCriteria(Criteria.where("description").regex(filter.getDescription()));
+        }
+        if (filter.getTags() != null && !filter.getTags().isEmpty()) {
+            Criteria tagsCriteria = new Criteria();
+            for (String tag : filter.getTags()) {
+                tagsCriteria.orOperator(Criteria.where("categories.tag.tag").regex(tag, "i"));
+            }
+            query.addCriteria(tagsCriteria);
+        }
 
-    public List<MediaDto> readAllByTag(String tagName) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("categories.tag.name").is(tagName));
-        List<Media> medias = mongoTemplate.find(query, Media.class);
-        return medias.stream().map(AppModelMapper::mapModelToDto).toList();
-    }
-
-    public List<MediaDto> readAllByTagDescription(String description) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("categories.tag.description").regex(description, "i")); // "i" for case-insensitive
         List<Media> medias = mongoTemplate.find(query, Media.class);
         return medias.stream().map(AppModelMapper::mapModelToDto).toList();
     }

@@ -14,7 +14,7 @@ const StyledHeader = styled.header`
     > div {
         max-width: 1280px;
         margin: 0 auto;
-        padding: 24px 100px;
+        padding: 24px 0;
         display: flex;
         align-items: center;
         gap: 64px;
@@ -42,7 +42,7 @@ const Header: React.FunctionComponent<HeaderProps> = (props) => {
                 <div>
                     <Navigation />
                     <ul>
-                        <FlatButton type="button" secondary onClick={() => navigate("signup")}>
+                        <FlatButton type="button" $secondary onClick={() => navigate("signup")}>
                             <NavLink to="/signup">Sign Up</NavLink>
                         </FlatButton>
                         <FlatButton type="button" onClick={() => navigate("login")}>

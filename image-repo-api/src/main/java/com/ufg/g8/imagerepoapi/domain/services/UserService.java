@@ -73,16 +73,7 @@ public class UserService implements IUserService, UserDetailsService {
             user.setProfilePicture(mediaFile);
         }
         user.setPassword(EncryptUtils.encode(user.getPassword()));
-        User saved = this.userRepository.save(user);
-        this.publisher.publishEvent(
-                new AuditEvent(
-                        this,
-                        saved,
-                        "USER",
-                        saved.getId(),
-                        ActionType.CREATE
-                )
-        );
+        this.userRepository.save(user);
     }
 
     public UserDto read(ObjectId id) {
@@ -139,14 +130,6 @@ public class UserService implements IUserService, UserDetailsService {
 
     public void delete(ObjectId id) {
         this.userRepository.deleteById(id);
-        this.publisher.publishEvent(
-                new AuditEvent(
-                        this,
-                        "USER",
-                        id,
-                        ActionType.DELETE
-                )
-        );
     }
 
     @Override

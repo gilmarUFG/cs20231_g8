@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
+
 type ButtonProps = {
-    label: string;
-    type?: "button" | "submit" | "reset";
+    children: ReactNode;
     onClick: () => void | ((parameter: any) => void);
+    type?: "button" | "submit" | "reset";
     disabled?: boolean;
     primary?: boolean;
     secondary?: boolean;
@@ -9,8 +11,8 @@ type ButtonProps = {
 }
 
 const Button: React.FunctionComponent<ButtonProps> = (props) => {
-    const { label, type, onClick, disabled } = props;
-    return <button type={type ?? 'button'} disabled={disabled ?? false} onClick={onClick}>{ label }</button>;
+    const { type, onClick, disabled } = props;
+    return <button type={type ?? 'button'} disabled={disabled ?? false} onClick={onClick}>{ props.children }</button>;
 }
 
 export default Button;

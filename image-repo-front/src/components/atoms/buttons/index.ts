@@ -1,2 +1,2 @@
-export { default as TextButton } from "./FlatButton";
-export { default as FlatButton } from "./TextButton";
+export { default as FlatButton } from "./FlatButton";
+export { default as TextButton } from "./TextButton";

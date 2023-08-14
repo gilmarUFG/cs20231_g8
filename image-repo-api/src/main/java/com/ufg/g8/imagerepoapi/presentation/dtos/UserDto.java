@@ -1,11 +1,10 @@
 package com.ufg.g8.imagerepoapi.presentation.dtos;
 
+import com.ufg.g8.imagerepoapi.domain.models.MediaFile;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 import java.util.List;
@@ -26,6 +25,8 @@ public class UserDto {
     private String name;
 
     private ObjectId profilePictureId;
+
+    private MediaFile profilePicture;
 
     private List<ReportDto> reports;
 

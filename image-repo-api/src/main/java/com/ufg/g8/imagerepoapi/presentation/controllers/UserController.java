@@ -1,6 +1,5 @@
 package com.ufg.g8.imagerepoapi.presentation.controllers;
 
-import com.ufg.g8.imagerepoapi.presentation.dtos.CredentialsDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TokenDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.UserDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IUserService;
@@ -36,6 +35,12 @@ public class UserController {
         return this.userService.read(id);
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto findAuthenticated() {
+        return this.userService.findAuthenticated();
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable(name = "id")ObjectId id, @RequestBody @Valid UserDto userDto) {
@@ -47,4 +52,5 @@ public class UserController {
     public void delete(@PathVariable(name = "id")ObjectId id) {
         this.userService.delete(id);
     }
+
 }

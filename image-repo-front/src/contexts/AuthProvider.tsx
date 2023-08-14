@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import User from '../models/user.model';
-import { authenticated, getToken } from '../api/services/auth.service';
+import { authenticated, clearToken, getToken, setToken } from '../api/services/auth.service';
+import { findCurrentUser } from '../api/services/user.service';
+import { toast } from 'react-toastify';
 
 type AuthProviderProps = {
     children: ReactNode;
@@ -8,7 +10,7 @@ type AuthProviderProps = {
 
 type AuthContextData = {
   isAuthenticated: boolean;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
   user: User;
 };
@@ -23,17 +25,28 @@ const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }) 
 
   const [user, setUser] = useState(new User());
 
-  const login = (): void => {
-    setIsAuthenticated(true);
+  const login = (token: string): void => {
+    setToken(token);
+    findCurrentUser()
+      .then(
+        response => {
+          setUser(response.data);
+          setIsAuthenticated(true);
+        }
+      )
+      .catch(
+        error => toast.error(error.message)
+      )
   };
 
   const logout = (): void => {
     setIsAuthenticated(false);
+    clearToken();
   };
 
   useEffect(() => {
     if (authenticated()) {
-      setIsAuthenticated(true);
+      login(getToken());
     }
   }, []);
 

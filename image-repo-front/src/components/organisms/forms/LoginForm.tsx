@@ -3,8 +3,10 @@ import { styled } from "styled-components";
 import { FlatButton, Input } from "../..";
 import * as Yup from "yup";
 import { Credentials } from "../../../models/credentials.model";
-import { login, setToken } from "../../../api/services/auth.service";
+import { authenticate } from "../../../api/services/auth.service";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {};
 
@@ -30,6 +32,10 @@ const StyledLoginForm = styled.div`
 
 const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
 
+    const { login } = useAuth();
+
+    const navigate = useNavigate();
+
     const initialValues: Credentials = {
         login: "",
         password: ""
@@ -42,10 +48,11 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
 
     const handleSubmit = (values: any, { setSubmitting }: any) => {
         setSubmitting(false);
-        login(values).then(
-            () => {
-                toast.success("Usuário cadastrado com sucesso!");
-                setToken(values.token);
+        authenticate(values).then(
+            response => {
+                const data = response.data.token;
+                navigate("images");
+                login(data);
             }
         ).catch(
             error => toast.error(error.message)
@@ -60,7 +67,7 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
                 validationSchema={validationSchema}
             >
                 {
-                    ({values, isSubmitting, setFieldValue}) => (
+                    () => (
                         <Form>
                             <h3>
                                 Pixel Port

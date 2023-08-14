@@ -36,7 +36,7 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
     };
 
     const validationSchema = Yup.object({
-        login: Yup.string().matches(/\s/g, "Não são permitidos login com espaços").required("Login é obrigatório"),
+        login: Yup.string().matches(/^\S+$/, "Não são permitidos login com espaços").required("Login é obrigatório"),
         password: Yup.string().min(6, "Mínimo de 6 caracteres para senha").required("Senha é obrigatório")
     });
 
@@ -48,7 +48,7 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
                 setToken(values.token);
             }
         ).catch(
-            () => toast.error("Erro ao cadastrar usuário")
+            error => toast.error(error.message)
         );
     }
     

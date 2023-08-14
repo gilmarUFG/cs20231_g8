@@ -8,6 +8,7 @@ export default class User extends BaseEntity {
     password: string;
     name: string;
     profilePictureId: string;
+    profilePicture: MediaFile;
     reports: Report[];
 
     constructor(
@@ -16,6 +17,7 @@ export default class User extends BaseEntity {
         password: string = '',
         name: string = '',
         profilePictureId: string = '',
+        profilePicture: MediaFile = new MediaFile(),
         reports: Report[] = [],
         updatedAt: Date = new Date(),
         createdAt: Date = new Date()
@@ -25,6 +27,7 @@ export default class User extends BaseEntity {
         this.password = password;
         this.name = name;
         this.profilePictureId = profilePictureId;
+        this.profilePicture = profilePicture;
         this.reports = reports;
     }
 }

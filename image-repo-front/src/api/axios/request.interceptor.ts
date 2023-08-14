@@ -1,5 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { authenticated, getToken } from "../services/auth.service";
+import { authenticated, getToken } from "https://deploy-pixel-port-production.up.railway.app";
 
 export const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     config.headers = config.headers || {};

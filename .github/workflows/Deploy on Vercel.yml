@@ -22,8 +22,8 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --token=1bSZ5UeO8EQ4QglwvyMkK199
         
-      - name: Change Directory to "image-repo-api-front"
-        run: cd image-repo-api-front
+      - name: Change Directory to "image-repo-front"
+        run: cd image-repo-front
         
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prod --token=1bSZ5UeO8EQ4QglwvyMkK199

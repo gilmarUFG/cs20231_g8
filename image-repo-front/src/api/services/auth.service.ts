@@ -6,7 +6,13 @@ import api from "../axios/http-common";
 const token = "token";
 
 export const login = (credentials: Credentials): Promise<AxiosResponse<Token>> => {
-    return api.post<Token>('/users/login', credentials);
+    return api.post<Token>('/users/login', {}, {
+            auth: { 
+                username: credentials.login,
+                password: credentials.password
+            }
+        }
+    );
 }
 
 export const setToken = (token: string): void => {

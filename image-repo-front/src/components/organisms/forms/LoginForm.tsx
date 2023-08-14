@@ -3,8 +3,10 @@ import { styled } from "styled-components";
 import { FlatButton, Input } from "../..";
 import * as Yup from "yup";
 import { Credentials } from "../../../models/credentials.model";
-import { login, setToken } from "../../../api/services/auth.service";
+import { authenticate } from "../../../api/services/auth.service";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {};
 
@@ -30,25 +32,30 @@ const StyledLoginForm = styled.div`
 
 const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
 
+    const { login } = useAuth();
+
+    const navigate = useNavigate();
+
     const initialValues: Credentials = {
         login: "",
         password: ""
     };
 
     const validationSchema = Yup.object({
-        login: Yup.string().matches(/\s/g, "Não são permitidos login com espaços").required("Login é obrigatório"),
+        login: Yup.string().matches(/^\S+$/, "Não são permitidos login com espaços").required("Login é obrigatório"),
         password: Yup.string().min(6, "Mínimo de 6 caracteres para senha").required("Senha é obrigatório")
     });
 
     const handleSubmit = (values: any, { setSubmitting }: any) => {
         setSubmitting(false);
-        login(values).then(
-            () => {
-                toast.success("Usuário cadastrado com sucesso!");
-                setToken(values.token);
+        authenticate(values).then(
+            response => {
+                const data = response.data.token;
+                navigate("images");
+                login(data);
             }
         ).catch(
-            () => toast.error("Erro ao cadastrar usuário")
+            error => toast.error(error.message)
         );
     }
     
@@ -60,7 +67,7 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
                 validationSchema={validationSchema}
             >
                 {
-                    ({values, isSubmitting, setFieldValue}) => (
+                    () => (
                         <Form>
                             <h3>
                                 Pixel Port

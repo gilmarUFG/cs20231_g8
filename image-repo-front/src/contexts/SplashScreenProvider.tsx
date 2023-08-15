@@ -18,6 +18,20 @@ const SplashScreenProvider: React.FunctionComponent<SplashScreenProviderProps> =
 
   const [show, setShow] = useState(false);
 
+  useEffect(() => {
+    if (show) {
+        setShow(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (show)
+      document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [show]);
+
   const start = (): void => {
     setShow(true);
   };
@@ -25,12 +39,6 @@ const SplashScreenProvider: React.FunctionComponent<SplashScreenProviderProps> =
   const stop = (): void => {
     setShow(false);
   };
-
-  useEffect(() => {
-    if (show) {
-        setShow(true);
-    }
-  }, []);
 
   return (
     <SplashScreenContext.Provider value={{ show, start, stop }}>

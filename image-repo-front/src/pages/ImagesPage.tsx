@@ -1,4 +1,6 @@
-type ImagesPageProps = {};
+type ImagesPageProps = {
+    $userImages?: boolean;
+};
 
 const ImagesPage: React.FunctionComponent<ImagesPageProps> = (props) => {
     return <p>é pra ser a página de lista de imagens</p>

@@ -7,7 +7,8 @@ import { createUser } from "../../../api/services/user.service";
 import { toast } from "react-toastify";
 import { uploadFile } from "../../../api/services/file.service";
 import MediaFile from "../../../models/mediafile.model";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useSplashScreen } from "../../../contexts/SplashScreenProvider";
 
 type SignUpFormProps = {};
 
@@ -33,7 +34,9 @@ const StyledSignUpForm = styled.div`
 
 const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
 
-    const navigate = useNavigate();
+    const navigate: NavigateFunction = useNavigate();
+
+    const { start, stop } = useSplashScreen();
 
     const initialValues: UserProfile = {
         name: "",
@@ -50,6 +53,7 @@ const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
     });
 
     const onChangeFile = ($event: any, setFieldValue: (field: string, value: any) => void) => {
+        start();
         uploadFile($event.currentTarget.files[0])
             .then(
                 response => {
@@ -57,21 +61,29 @@ const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
                     setFieldValue("profilePictureId", data?.id);
                     setFieldValue("profilePicture", data);
                     toast.success("Imagem cadastrada com sucesso");
+                    stop();
                 }
             ).catch(
-                error => toast.error(error.message)
+                error => {
+                    toast.error(error.message);
+                    stop();
+                }
             )
     }
 
-    const handleSubmit = (values: any, { setSubmitting }: any) => {
-        setSubmitting(false);
+    const handleSubmit = (values: any) => {
+        start();
         createUser(values).then(
             () => {
                 toast.success("Usuário cadastrado com sucesso!");
-                navigate("login");
+                navigate("/login");
+                stop();
             }
         ).catch(
-            error => toast.error(error.message)
+            error => {
+                toast.error(error.message);
+                stop();
+            }
         );
     }
 

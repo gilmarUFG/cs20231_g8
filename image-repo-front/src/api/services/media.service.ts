@@ -12,7 +12,7 @@ export const readAll = (filter: MediaFilter, auth: boolean = false): Promise<Axi
 }
 
 export const readMedia = (mediaId: string, auth: boolean = false): Promise<AxiosResponse<Media>> => {
-    return api.get<Media>(`${auth && '/public'}/images/${mediaId}`);
+    return api.get<Media>(`${auth ? '' : '/public'}/images/${mediaId}`);
 }
 
 export const updateMedia = (media: Media): Promise<AxiosResponse<void>> => {

@@ -12,7 +12,13 @@ type ImagePageProps = {
 }
 
 const StyledImagePage = styled.div`
-
+    margin: 128px 0 64px 0;
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 const ImagePage: React.FunctionComponent<ImagePageProps> = (props) => {
@@ -48,7 +54,9 @@ const ImagePage: React.FunctionComponent<ImagePageProps> = (props) => {
     return (
         <StyledImagePage>
             <AppContainer>
-                
+                <img src={'data:image/png;base64,' + media.file.base64} />
+                <h3>{media.name}</h3>
+                <h6>{media.description}</h6>
             </AppContainer>
         </StyledImagePage>
     )

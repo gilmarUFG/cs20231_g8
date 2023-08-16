@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig } from "axios";
+import { InternalAxiosRequestConfig } from "axios";
 import { authenticated, getToken } from "../services/auth.service";
 
 export const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {

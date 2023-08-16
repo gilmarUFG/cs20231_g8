@@ -6,7 +6,7 @@ import { useState } from "react";
 
 type UserMenuProps = {};
 
-const StyledUserMenu = styled.div`
+const StyledUserMenu = styled.nav`
     position: relative;
     button {
         display: flex;
@@ -80,10 +80,6 @@ const UserMenu: React.FunctionComponent<UserMenuProps> = (props) => {
         navigate("/profile");
     }
 
-    const onClickImages = (): void => {
-        navigate("/my-images");
-    }
-
     const onClickLogout = (): void => {
         logout();
         navigate("");
@@ -106,7 +102,6 @@ const UserMenu: React.FunctionComponent<UserMenuProps> = (props) => {
                     (
                         <ul onMouseLeave={() => setIsShown(false)}>
                             <li><button onClick={onClickProfile}>Meu Perfil</button></li>
-                            <li><button onClick={onClickImages}>Minhas Imagens</button></li>
                             <li><button onClick={onClickLogout}>Sair</button></li>
                         </ul>
                     )

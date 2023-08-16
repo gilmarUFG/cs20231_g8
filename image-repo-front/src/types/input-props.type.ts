@@ -8,6 +8,8 @@ type InputProps =  {
     src?: string;
     readonly?: boolean;
     onChangeValue?: ($event: any) => void;
+    value?: any;
+    persist?: boolean;
 }
 
 export default InputProps;

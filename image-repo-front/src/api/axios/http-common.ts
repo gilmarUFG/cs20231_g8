@@ -3,7 +3,7 @@ import { onRequest } from "./request.interceptor";
 import { errorHandler, onResponse } from "./response.interceptor";
 
 const api = axios.create({
-    baseURL: "https://deploy-pixel-port-production.up.railway.app/"
+    baseURL: "http://localhost:9090"
 });
 
 api.interceptors.request.use(onRequest);

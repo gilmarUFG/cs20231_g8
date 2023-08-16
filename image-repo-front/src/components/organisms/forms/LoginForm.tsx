@@ -6,7 +6,8 @@ import { Credentials } from "../../../models/credentials.model";
 import { authenticate } from "../../../api/services/auth.service";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../contexts/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useSplashScreen } from "../../../contexts/SplashScreenProvider";
 
 type LoginFormProps = {};
 
@@ -34,7 +35,9 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
 
     const { login } = useAuth();
 
-    const navigate = useNavigate();
+    const { start, stop } = useSplashScreen();
+
+    const navigate: NavigateFunction = useNavigate();
 
     const initialValues: Credentials = {
         login: "",
@@ -46,16 +49,20 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => {
         password: Yup.string().min(6, "Mínimo de 6 caracteres para senha").required("Senha é obrigatório")
     });
 
-    const handleSubmit = (values: any, { setSubmitting }: any) => {
-        setSubmitting(false);
+    const handleSubmit = (values: any) => {
+        start();
         authenticate(values).then(
             response => {
                 const data = response.data.token;
-                navigate("images");
+                navigate("/images");
                 login(data);
+                stop();
             }
         ).catch(
-            error => toast.error(error.message)
+            error => {
+                toast.error(error.message);
+                stop();
+            }
         );
     }
     

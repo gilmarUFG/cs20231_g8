@@ -18,11 +18,11 @@ export default class Media extends BaseEntity {
     reports: Report[];
 
     constructor(
-        id: string,
-        name: string,
-        description: string,
-        views: number,
-        downloads: number,
+        id: string = '',
+        name: string = '',
+        description: string = '',
+        views: number = 0,
+        downloads: number = 0,
         authorName: string = '',
         authorId: string = '',
         tagsId: string[] = [],
@@ -30,8 +30,8 @@ export default class Media extends BaseEntity {
         file: MediaFile = new MediaFile(),
         fileId: string = '',
         reports: Report[] = [],
-        updatedAt: Date,
-        createdAt: Date
+        updatedAt: Date = new Date(),
+        createdAt: Date = new Date()
     ) {
         super(id, updatedAt, createdAt);
         this.name = name;

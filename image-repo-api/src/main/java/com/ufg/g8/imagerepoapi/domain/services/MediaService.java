@@ -23,7 +23,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MediaService implements IMediaService {
@@ -107,8 +109,9 @@ public class MediaService implements IMediaService {
             query.addCriteria(tagsCriteria);
         }
 
-        List<Media> medias = mongoTemplate.find(query, Media.class);
-        return medias.stream().map(AppModelMapper::mapModelToDto).toList();
+        return Optional.ofNullable(mongoTemplate.find(query, Media.class))
+                .map(medias -> medias.stream().map(AppModelMapper::mapModelToDto).toList())
+                .orElse(new ArrayList<>());
     }
 
     @Override

@@ -7,8 +7,10 @@ import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 public class AppModelMapper {
 
@@ -23,9 +25,9 @@ public class AppModelMapper {
                 .map(AppModelMapper::mapModelToDto).toList();
         mediaDto.setTags(tags);
         mediaDto.setReports(
-                media.getReports().stream()
-                        .map(AppModelMapper::mapModelToDto)
-                        .toList()
+                Optional.ofNullable(media.getReports())
+                        .map(reports -> reports.stream().map(AppModelMapper::mapModelToDto).toList())
+                        .orElse(new ArrayList<>())
         );
         return mediaDto;
     }

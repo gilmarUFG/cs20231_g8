@@ -6,7 +6,7 @@ import { useState } from "react";
 
 type UserMenuProps = {};
 
-const StyledUserMenu = styled.div`
+const StyledUserMenu = styled.nav`
     position: relative;
     button {
         display: flex;
@@ -33,21 +33,31 @@ const StyledUserMenu = styled.div`
             font-weight: 500;
         }
     }
-    table {
+    ul {
+        min-width: 180px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        justify-content: center;
+        align-items: center;
         position: absolute;
         top: 50px;
         left: 50%;
         transform: translateX(-50%);
+        background-color: white;
+        background-color: white.
+        border: 2px solid #747880;
+        border-radius: 4px;
         z-index: 3;
-        tbody {
-            background-color: white.
-            border: 2px solid #747880;
-            border-radius: 4px;
-            tr {
-                td {
-                    button {
-                        background-color: inherit;
-                    }
+        list-style:none;
+        li {
+            button {
+                font-size: 14px;
+                font-weight: 400;
+                background-color: inherit;
+                &:hover {
+                    font-weight: 500;
                 }
             }
         }
@@ -60,20 +70,20 @@ const UserMenu: React.FunctionComponent<UserMenuProps> = (props) => {
 
     const navigate: NavigateFunction = useNavigate();
 
-    const onClickLogout = (): void => {
-        navigate("home");
-        logout();
-    }
+    const [isShown, setIsShown] = useState(false);
 
     const onClickShowMenu = (): void => {
         setIsShown(!isShown);
     }
 
     const onClickProfile = (): void => {
-        navigate("profile");
+        navigate("/profile");
     }
 
-    const [isShown, setIsShown] = useState(false);
+    const onClickLogout = (): void => {
+        logout();
+        navigate("");
+    }
 
     return (
         <StyledUserMenu>
@@ -81,24 +91,19 @@ const UserMenu: React.FunctionComponent<UserMenuProps> = (props) => {
                 {
                     user?.profilePicture?.base64
                     ?
-                    <img src={user?.profilePicture?.base64} />
+                        <img src={user?.profilePicture?.base64} />
                     :
-                    <FaUserCircle color="#2491ff" />
+                        <FaUserCircle color="#2491ff" />
                 }
                 <p>{user.name}</p>
             </button>
             {
-                isShown ??
+                isShown && 
                     (
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td><button>Meu Perfil</button></td>
-                                    <td><button>Minhas Imagens</button></td>
-                                    <td><button onClick={onClickLogout}>Sair</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <ul onMouseLeave={() => setIsShown(false)}>
+                            <li><button onClick={onClickProfile}>Meu Perfil</button></li>
+                            <li><button onClick={onClickLogout}>Sair</button></li>
+                        </ul>
                     )
             }
         </StyledUserMenu>

@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to Vercel
 env:
   VERCEL_ORG_ID: DManj4yLeUapRIs6zvt5Rik5  
   VERCEL_PROJECT_ID: prj_vXNjNkj1Qtf4AwyDx4zSKjsXrbo8

@@ -1,0 +1,29 @@
+name: Deploy to Vercel
+env:
+  VERCEL_ORG_ID: DManj4yLeUapRIs6zvt5Rik5  
+  VERCEL_PROJECT_ID: prj_vXNjNkj1Qtf4AwyDx4zSKjsXrbo8
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  Deploy-on-Vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=1bSZ5UeO8EQ4QglwvyMkK199
+        
+      - name: Build Project Artifacts
+        run: vercel build --token=1bSZ5UeO8EQ4QglwvyMkK199
+        
+      - name: Change Directory to "image-repo-front"
+        run: cd image-repo-front
+        
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prod --token=1bSZ5UeO8EQ4QglwvyMkK199

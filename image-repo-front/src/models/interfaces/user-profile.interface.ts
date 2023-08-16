@@ -7,6 +7,6 @@ export default interface UserProfile {
     login: string;
     password: string;
     profilePictureId?: string | null;
-    profilePicture?: any;
+    profilePicture?: MediaFile | null;
 
 }

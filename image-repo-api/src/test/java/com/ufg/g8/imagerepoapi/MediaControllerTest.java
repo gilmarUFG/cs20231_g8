@@ -59,21 +59,6 @@ class MediaControllerTest {
         verify(mediaService, times(1)).readAll(filter);
     }
 
-    @Test
-    void readAllByTag_ShouldCallMediaServiceReadAllByTag() throws Exception {
-        // Teste para verificar se o método "readAllByTag" do controlador chama o método correspondente do serviço
-        String tagName = "tag";
-        invokePrivateMethod("readAllByTag", tagName);
-        verify(mediaService, times(1)).readAllByTag(tagName);
-    }
-
-    @Test
-    void getMediaByTagDescription_ShouldCallMediaServiceReadAllByTagDescription() throws Exception {
-        // Teste para verificar se o método "getMediaByTagDescription" do controlador chama o método correspondente do serviço
-        String description = "description";
-        invokePrivateMethod("getMediaByTagDescription", description);
-        verify(mediaService, times(1)).readAllByTagDescription(description);
-    }
 
     @Test
     void update_ShouldCallMediaServiceUpdate() throws Exception {

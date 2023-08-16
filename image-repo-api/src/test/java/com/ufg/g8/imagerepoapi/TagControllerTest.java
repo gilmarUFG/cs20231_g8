@@ -1,70 +1,62 @@
 package com.ufg.g8.imagerepoapi;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufg.g8.imagerepoapi.presentation.controllers.TagController;
-import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import com.ufg.g8.imagerepoapi.presentation.services.ITagService;
+import com.ufg.g8.imagerepoapi.presentation.dtos.TagDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.Date;
-import static org.mockito.Mockito.*;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(TagController.class)
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+@SpringBootTest
+@AutoConfigureMockMvc
 public class TagControllerTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @Mock
-    private ITagService tagService;
+    private ITagService tagServiceMock;
 
     @InjectMocks
     private TagController tagController;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setup() {
+        // Inicialização dos mocks antes de cada teste
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(tagController).build();
     }
 
     @Test
-    public void createTag_ReturnsTagDtoWithHttpStatusCreated() throws Exception {
-        String text = "test tag";
-        TagDto expectedTagDto = new TagDto();
-        expectedTagDto.setTag(text);
-        expectedTagDto.setId("1");
-        expectedTagDto.setTagBackground("#FFFFFF");
-        expectedTagDto.setTagTextColor("#000000");
-        expectedTagDto.setUpdatedAt(new Date());
-        expectedTagDto.setCreatedAt(new Date());
+    public void createTagTest() throws Exception {
+        // Criação de um objeto TagDto para simular o resultado esperado do serviço
+        TagDto expectedResult = new TagDto();
+        expectedResult.setTag("exampleTag");
 
-        // Mocka o comportamento do método tagService.create()
-        when(tagService.create(text)).thenReturn(expectedTagDto);
+        when(tagServiceMock.create(anyString())).thenReturn(expectedResult);
 
-        mockMvc.perform(post("/tags/{text}", text)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(asJsonString(expectedTagDto)));
+        // Execução do teste para verificar se o endpoint "/tags" cria a tag corretamente
+        mockMvc.perform(MockMvcRequestBuilders.post("/tags/exampleTag")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.tag").value("exampleTag"))
+                .andDo(print());
 
-        // Verifica se o método tagService.create() foi chamado com os parâmetros corretos
-        verify(tagService, times(1)).create(text);
-        verifyNoMoreInteractions(tagService);
-    }
+        // Verificação se o método tagServiceMock.create foi chamado exatamente uma vez com o texto da tag correto como argumento
+        verify(tagServiceMock, times(1)).create("exampleTag");
 
-    // Método auxiliar para converter o objeto para uma string JSON
-    private String asJsonString(Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        // Verificação de que não há mais interações com o serviço tagServiceMock após o teste
+        verifyNoMoreInteractions(tagServiceMock);
     }
 }

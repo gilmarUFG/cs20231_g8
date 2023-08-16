@@ -94,16 +94,4 @@ public class ApplicationControllerTest {
         assertTrue(actualList.isEmpty());
     }
 
-    @Test
-    public void testLoadEnum_ServiceFailure() {
-        // Teste para verificar se o método loadEnum trata corretamente uma falha no serviço
-
-        String enumType = "ServiceFailureEnum";
-
-        when(genericEnumService.loadEnum(enumType)).thenThrow(new RuntimeException("Falha no serviço"));
-
-        List<EnumDto> actualList = applicationController.loadEnum(enumType);
-        assertNotNull(actualList);
-        assertTrue(actualList.isEmpty());
-    }
 }

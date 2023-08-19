@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -94,6 +95,18 @@ public class UserService implements IUserService, UserDetailsService {
                         .map(AppModelMapper::mapModelToDto)
                         .toList()
         );
+        return userDto;
+    }
+
+    public UserDto findAuthenticated() {
+        User user = this.userRepository.findByLogin(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName()
+        ).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(user, userDto);
         return userDto;
     }
 

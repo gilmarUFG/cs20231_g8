@@ -24,9 +24,14 @@ const StyledErrorMessage = styled.span`
     font-size: 10px;
     font-weight: 500;
     opacity: 0.7;
+    position: absolute;
+    bottom: -16px;
+    left: 0;
 `;
 
 const StyledInput = styled.div`
+    position: relative;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     gap: 4px;

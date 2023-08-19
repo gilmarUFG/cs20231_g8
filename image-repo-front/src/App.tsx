@@ -21,7 +21,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
                                 <Route path="/" element={<HomePage />} />
                                 <Route path='images'>
                                     <Route index element={<ImagesPage />} />
-                                    <Route path=':number' element={<ImagePage />} />
+                                    <Route path=':mediaId' element={<ImagePage />} />
                                 </Route>
                                 <Route path="about" element={<AboutPage />} />
                                 <Route path="profile" element={<ProfilePage />} />

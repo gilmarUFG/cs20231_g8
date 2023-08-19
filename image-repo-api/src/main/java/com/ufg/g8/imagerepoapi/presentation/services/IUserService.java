@@ -17,6 +17,8 @@ public interface IUserService {
 
     UserDto read(ObjectId id);
 
+    UserDto findAuthenticated();
+
     void update(ObjectId id, UserDto userDto);
 
     void delete(ObjectId id);

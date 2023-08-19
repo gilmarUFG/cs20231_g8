@@ -1,10 +1,14 @@
 import { styled } from "styled-components";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { FlatButton, Input } from "../../atoms";
+import { FileInput, FlatButton, Input } from "../../atoms";
 import UserProfile from "../../../models/interfaces/user-profile.interface";
 import { createUser } from "../../../api/services/user.service";
 import { toast } from "react-toastify";
+import { uploadFile } from "../../../api/services/file.service";
+import MediaFile from "../../../models/mediafile.model";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useSplashScreen } from "../../../contexts/SplashScreenProvider";
 
 type SignUpFormProps = {};
 
@@ -30,6 +34,10 @@ const StyledSignUpForm = styled.div`
 
 const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
 
+    const navigate: NavigateFunction = useNavigate();
+
+    const { start, stop } = useSplashScreen();
+
     const initialValues: UserProfile = {
         name: "",
         login: "",
@@ -40,24 +48,42 @@ const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
 
     const validationSchema = Yup.object({
         name: Yup.string().required("Nome é obrigatório"),
-        login: Yup.string().matches(/\s/g, "Não são permitidos login com espaços").required("Login é obrigatório"),
+        login: Yup.string().matches(/^\S+$/, "Não são permitidos login com espaços").required("Login é obrigatório"),
         password: Yup.string().min(6, "Mínimo de 6 caracteres para senha").required("Senha é obrigatório")
     });
 
-    const handleFileUpload = (file: any, setFieldValue: (field: string, value: any) => void) => {
-
+    const onChangeFile = ($event: any, setFieldValue: (field: string, value: any) => void) => {
+        start();
+        uploadFile($event.currentTarget.files[0])
+            .then(
+                response => {
+                    const data = response.data;
+                    setFieldValue("profilePictureId", data?.id);
+                    setFieldValue("profilePicture", data);
+                    toast.success("Imagem cadastrada com sucesso");
+                    stop();
+                }
+            ).catch(
+                error => {
+                    toast.error(error.message);
+                    stop();
+                }
+            )
     }
 
-    const onChangeFile = ($event: any) => {
-
-    }
-
-    const handleSubmit = (values: any, { setSubmitting }: any) => {
-        setSubmitting(false);
+    const handleSubmit = (values: any) => {
+        start();
         createUser(values).then(
-            () => toast.success("Usuário cadastrado com sucesso!")
+            () => {
+                toast.success("Usuário cadastrado com sucesso!");
+                navigate("/login");
+                stop();
+            }
         ).catch(
-            () => toast.error("Erro ao cadastrar usuário")
+            error => {
+                toast.error(error.message);
+                stop();
+            }
         );
     }
 
@@ -69,7 +95,7 @@ const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
                 validationSchema={validationSchema}
             >
                 {
-                    ({values, isSubmitting, setFieldValue}) => (
+                    ({values, setFieldValue}) => (
                         <Form>
                             <h3>
                                 Pixel Port
@@ -77,6 +103,7 @@ const SignUpForm: React.FunctionComponent<SignUpFormProps> = (props) => {
                             <h5>
                                 Junte-se a nós!
                             </h5>
+                            <FileInput name="file" src={values.profilePicture?.base64} placeholder="Foto de Perfil" onChangeValue={$event => onChangeFile($event, setFieldValue)} />
                             <Input name="name" label="Nome" placeholder="Nome do Usuário" required />
                             <Input name="login" label="Login" placeholder="Login do Usuário" required />
                             <Input name="password" label="Senha" placeholder="Senha do Usuário" type="password" required />

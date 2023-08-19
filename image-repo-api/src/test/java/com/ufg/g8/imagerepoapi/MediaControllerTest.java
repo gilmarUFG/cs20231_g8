@@ -1,66 +1,102 @@
 package com.ufg.g8.imagerepoapi;
 
+import com.ufg.g8.imagerepoapi.domain.services.filters.MediaFilter;
+import com.ufg.g8.imagerepoapi.presentation.controllers.MediaController;
 import com.ufg.g8.imagerepoapi.presentation.dtos.MediaDto;
+import com.ufg.g8.imagerepoapi.presentation.dtos.ReportDto;
 import com.ufg.g8.imagerepoapi.presentation.services.IMediaService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.Collections;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class MediaControllerTest {
+class MediaControllerTest {
 
+    // Mocks para o serviço e o controlador
     @Mock
     private IMediaService mediaService;
 
     @InjectMocks
-    private MediaControllerTest mediaController;
-
-    private MockMvc mockMvc;
+    private MediaController mediaController;
 
     @BeforeEach
-    public void setup() {
-        // Inicialização do MockMvc para realizar os testes
-        mockMvc = MockMvcBuilders.standaloneSetup(mediaController).build();
+    void setUp() {
+        // Inicialização do Mockito para os testes
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testCreateMedia() throws Exception {
-        // Criação de um objeto MediaDto para simular os dados da imagem enviados na requisição
+    void create_ShouldCallMediaServiceCreate() throws Exception {
+        // Teste para verificar se o método "create" do controlador chama o método correspondente do serviço
         MediaDto mediaDto = new MediaDto();
-        mediaDto.setName("Sample Image");
-        mediaDto.setDescription("A sample image");
-        mediaDto.setViews(0);
-        mediaDto.setDownloads(0);
-        mediaDto.setAuthorName("Test User");
-        mediaDto.setAuthorId(new ObjectId());
-        mediaDto.setTagsId(Collections.emptyList());
-        mediaDto.setTags(Collections.emptyList());
-        mediaDto.setFile(null);
-        mediaDto.setFileId(new ObjectId());
-        mediaDto.setReports(Collections.emptyList());
-        mediaDto.setUpdatedAt(new Date());
-        mediaDto.setCreatedAt(new Date());
+        invokePrivateMethod("create", mediaDto);
+        verify(mediaService, times(1)).create(mediaDto);
+    }
 
-        // Execução do teste para verificar se o endpoint "/images" cria a imagem corretamente
-        mockMvc.perform(post("/images")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Sample Image\",\"description\":\"A sample image\",\"views\":0,\"downloads\":0,\"authorName\":\"Test User\",\"authorId\":\"id\",\"tagsId\":[],\"tags\":[],\"file\":null,\"fileId\":\"id\",\"reports\":[],\"updatedAt\":\"2023-07-21T00:00:00.000Z\",\"createdAt\":\"2023-07-21T00:00:00.000Z\"}"))
-                .andExpect(status().isCreated());
+    @Test
+    void read_ShouldCallMediaServiceRead() throws Exception {
+        // Teste para verificar se o método "read" do controlador chama o método correspondente do serviço
+        ObjectId id = new ObjectId();
+        invokePrivateMethod("read", id);
+        verify(mediaService, times(1)).read(id);
+    }
 
-        // Verificação se o método mediaService.create foi chamado exatamente uma vez com qualquer objeto MediaDto como argumento
-        verify(mediaService, times(1)).create(any(MediaDto.class));
+    @Test
+    void readAll_ShouldCallMediaServiceReadAll() throws Exception {
+        // Teste para verificar se o método "readAll" do controlador chama o método correspondente do serviço
+        MediaFilter filter = new MediaFilter();
+        invokePrivateMethod("readAll", filter);
+        verify(mediaService, times(1)).readAll(filter);
+    }
 
-        // Verificação de que não há mais interações com o serviço mediaService após o teste
-        verifyNoMoreInteractions(mediaService);
+
+    @Test
+    void update_ShouldCallMediaServiceUpdate() throws Exception {
+        // Teste para verificar se o método "update" do controlador chama o método correspondente do serviço
+        ObjectId id = new ObjectId();
+        MediaDto mediaDto = new MediaDto();
+        invokePrivateMethod("update", id, mediaDto);
+        verify(mediaService, times(1)).update(id, mediaDto);
+    }
+
+    @Test
+    void delete_ShouldCallMediaServiceDelete() throws Exception {
+        // Teste para verificar se o método "delete" do controlador chama o método correspondente do serviço
+        ObjectId id = new ObjectId();
+        invokePrivateMethod("delete", id);
+        verify(mediaService, times(1)).delete(id);
+    }
+
+    @Test
+    void report_ShouldCallMediaServiceReport() throws Exception {
+        // Teste para verificar se o método "report" do controlador chama o método correspondente do serviço
+        ObjectId id = new ObjectId();
+        ObjectId userId = new ObjectId();
+        ReportDto reportDto = new ReportDto();
+        invokePrivateMethod("report", id, userId, reportDto);
+        verify(mediaService, times(1)).report(id, userId, reportDto);
+    }
+
+    // Método auxiliar para invocar métodos privados usando reflexão
+    private void invokePrivateMethod(String methodName, Object... args) throws Exception {
+        Class<?>[] argTypes = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            argTypes[i] = args[i].getClass();
+        }
+
+        // Utiliza reflexão para invocar o método privado do controlador com os argumentos passados
+        java.lang.reflect.Method method = MediaController.class.getDeclaredMethod(methodName, argTypes);
+        method.setAccessible(true);
+        method.invoke(mediaController, args);
     }
 }
